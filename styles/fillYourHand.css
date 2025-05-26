@@ -1,0 +1,169 @@
+body {
+   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #ffb033;
+  display: flex;
+  justify-content: center;
+}
+
+.board {
+  padding: 20px;
+  max-width: 1200px;
+  text-align: center;
+  width: 70%;
+}
+
+
+.miracoli {
+  display: ruby;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+
+
+.buttons {
+  display: grid;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.slot, .personaggio {
+  width: 80px;
+  height: 120px;
+  background: #ffffff85;
+  border-radius: 8%;
+  margin: 5px;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease;
+}
+
+.personaggio {
+  display: inline-block;
+}
+
+.hand {
+  position: relative;
+  height: 200px;
+  margin-top: 40px;
+}
+
+.card {
+  width: 80px;
+  height: 120px;
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  transform-origin: bottom center;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+button {
+  text-decoration: none;
+  background-color: #2f000a;
+  color:white;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  padding:4%;
+  font-size: 14px;
+  margin:1%
+
+}
+
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #ffffffdb;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* Spazio tra i bottoni */
+  border-radius: 10px;
+}
+
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 20px 0 10px 0;
+  text-align: center;
+  color: #e0004e;
+  text-decoration: overline;
+}
+
+
+#custom-alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f44336;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#custom-alert.show {
+  opacity: 1;
+}
+
+
+
+
+
+.top-image-container {
+  width: 100%;
+  text-align: center;
+}
+
+.top-image {
+  width: 60%;
+  height: auto;
+  border-radius: 100%;
+  
+}
+
+
+@media (min-width: 768px) {
+
+  .top-image {
+     width: 20%;
+  }
+
+  button{
+    padding: 0.75rem 1.5rem;
+    font-size: 16px;
+    margin:2%
+  }
+
+  .buttons{
+    display:grid;
+   
+  }
+
+}

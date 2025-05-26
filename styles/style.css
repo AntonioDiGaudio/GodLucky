@@ -1,0 +1,98 @@
+/* .background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../static/background.png') no-repeat center center;
+  background-size: cover;
+  opacity: 0.85;
+} */
+
+/* Reset base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #ffb033;
+  overflow-x: hidden;
+}
+
+/* Immagine in alto */
+.top-image-container {
+  width: 100%;
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+}
+
+.top-image {
+  width: 60%;
+  height: auto;
+  border-radius: 100%;
+  
+}
+
+/* Centered content */
+.content {
+  max-width: 400px;
+  width: 78%;
+  margin: 0 auto;
+  background-color: #f7fbfc;
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* GIF styling */
+.loop-gif {
+  width: 60%;
+  max-width: 300px;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  background-color: #2f000a;
+  color:white;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #e0004e;
+;
+}
+
+/* Responsive tweaks */
+@media (min-width: 768px) {
+  .loop-gif {
+    max-width: 180px;
+  }
+
+  .top-image {
+     width: 20%;
+  }
+
+  .btn {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+  }
+}

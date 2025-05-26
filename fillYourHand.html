@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gioco di Carte</title>
+  <link rel="stylesheet" href="/styles/fillYourHand.css">
+  
+</head>
+<body>
+  <div id="custom-alert"></div>
+  
+    <div class="board">
+       <div class="top-image-container">
+        <a href="/home.html">
+    <img src="static/images/logo-transparent.png" alt="Top Banner" class="top-image" />
+    </a>
+  </div>
+
+    <div id="custom-alert"></div>
+    
+    <div class="section-title">MIRACOLI</div>
+    <div class="miracoli">
+      <div class="slot" id="mir1"></div>
+      <div class="slot" id="mir2"></div>
+      <div class="slot" id="mir3"></div>
+      <div class="slot" id="mir4"></div>
+      <div class="slot" id="mir5"></div>
+      <div class="slot" id="mir6"></div>
+      <div class="slot" id="mir7"></div>
+    </div>
+
+    <div class="section-title">DIVINITÀ</div>
+    <div class="personaggio-container">
+      <div class="personaggio" id="personaggio"></div>
+    </div>
+
+    <div class="buttons">
+      <button onclick="showAdd('personaggio')">Aggiungi personaggio<br>➕🧙‍♂️ </button>
+      <button onclick="showRemove('personaggio')">Rimuovi personaggio<br>➖🧙‍♂️</button>
+      <button onclick="showAdd('oggetto')">Aggiungi oggetto<br>➕🧰</button>
+      <button onclick="showRemove('oggetto')">Rimuovi oggetto<br>➖🧰</button>
+      <button onclick="showAdd('miracolo')">Aggiungi miracolo<br>➕✨</button> 
+      <button onclick="showRemove('miracolo')">Rimuovi miracolo<br>➖✨ </button>
+      <button onclick="clearGame()">Pulisci partita<br>🧹</button>
+    </div>
+
+
+    <div class="section-title">MANO</div>
+    <div class="hand-container">
+      <div class="hand" id="hand"></div>
+    </div>
+  </div>
+
+  <!-- Modali per scelta -->
+  <div class="modal" id="modal">
+    <div class="modal-content" id="modal-content"></div>
+  </div>
+
+  <script src="js/fillYourHand.js"></script>
+</body>
+</html>
