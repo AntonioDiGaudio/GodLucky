@@ -360,6 +360,8 @@ function clearGame() {
   }
 }
 
+
+
 // ----- STORAGE -----
 function saveState() {
   localStorage.setItem("mano", JSON.stringify(mano));
