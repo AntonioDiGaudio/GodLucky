@@ -99,6 +99,7 @@ button {
   align-items: center;
   gap: 10px; /* Spazio tra i bottoni */
   border-radius: 10px;
+  width: 80%;
 }
 
 
@@ -166,4 +167,49 @@ button {
    
   }
 
+}
+
+.burger {
+  display: none;
+  font-size: 1.2rem;
+  padding: 10px;
+  background-color: #2f000a;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  margin: 10px auto;
+  border: none;
+  cursor: pointer;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .burger {
+    display: block;
+  }
+
+  .buttons {
+    display: none; /* nasconde i bottoni */
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .buttons.show {
+    display: grid;
+  }
+}
+
+
+.menu-container{
+  background: transparent;
+  padding: 10px;
+  align-items: center;
+  border-radius: 10px;
+
+}
+
+
+.menu-container.open {
+  background: #ffffffa1; 
 }

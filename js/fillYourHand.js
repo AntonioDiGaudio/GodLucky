@@ -387,3 +387,36 @@ function loadState() {
 modal.addEventListener("click", e => {
   if (e.target === modal) closeModal();
 });
+
+
+
+// ----- INFO -----
+function showInfo() {
+  modal.style.display = "flex";
+  modalContent.innerHTML = `
+  <h3>Funzionalità</h3>
+  <ul>
+    <li>Tenere premuto fa zoomare sulla carta</li>
+    <li>Un click fa girare la carta</li>
+    <li>Se si esce dalla pagina, al rientro i dati saranno salvati,per eliminarli cliccare su "Pulisci partita"</li>
+    <li>Non si possono avere carte uguali.</li>
+  </ul>
+`;
+
+}
+
+
+function toggleMenu() {
+  const menu = document.getElementById("menuButtons");
+  const container = document.querySelector(".menu-container");
+
+  menu.classList.toggle("show");
+  container.classList.toggle("open");
+}
+
+
+
+function goHome(){
+
+  window.location.href = '/index.html';
+}

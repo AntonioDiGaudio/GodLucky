@@ -18,6 +18,21 @@
   </div>
 
     <div id="custom-alert"></div>
+
+       <div class="menu-container">
+    <button class="burger" onclick="toggleMenu()">☰ Menu</button>
+    <div class="buttons" id="menuButtons">
+      <button onclick="showAdd('personaggio')">Aggiungi personaggio<br>➕🧙‍♂️ </button>
+      <button onclick="showRemove('personaggio')">Rimuovi personaggio<br>➖🧙‍♂️</button>
+      <button onclick="showAdd('oggetto')">Aggiungi oggetto<br>➕🧰</button>
+      <button onclick="showRemove('oggetto')">Rimuovi oggetto<br>➖🧰</button>
+      <button onclick="showAdd('miracolo')">Aggiungi miracolo<br>➕✨</button> 
+      <button onclick="showRemove('miracolo')">Rimuovi miracolo<br>➖✨ </button>
+      <button onclick="showInfo()">Funzionalità<br>ℹ️</button>
+      <button onclick="clearGame()">Pulisci partita<br>🧹</button>
+      <button onclick="goHome()">Vai alla Home<br>🏠</button>
+    </div>
+  </div>
     
     <div class="section-title">MIRACOLI</div>
     <div class="miracoli">
@@ -35,15 +50,8 @@
       <div class="personaggio" id="personaggio"></div>
     </div>
 
-    <div class="buttons">
-      <button onclick="showAdd('personaggio')">Aggiungi personaggio<br>➕🧙‍♂️ </button>
-      <button onclick="showRemove('personaggio')">Rimuovi personaggio<br>➖🧙‍♂️</button>
-      <button onclick="showAdd('oggetto')">Aggiungi oggetto<br>➕🧰</button>
-      <button onclick="showRemove('oggetto')">Rimuovi oggetto<br>➖🧰</button>
-      <button onclick="showAdd('miracolo')">Aggiungi miracolo<br>➕✨</button> 
-      <button onclick="showRemove('miracolo')">Rimuovi miracolo<br>➖✨ </button>
-      <button onclick="clearGame()">Pulisci partita<br>🧹</button>
-    </div>
+   
+
 
 
     <div class="section-title">MANO</div>
