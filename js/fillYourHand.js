@@ -10,7 +10,6 @@ let personaggio = null;
 window.addEventListener("beforeunload", saveState);
 window.addEventListener("DOMContentLoaded", loadState);
 
-
 function showAlert(message) {
   const alertBox = document.getElementById("custom-alert");
   alertBox.textContent = message;
@@ -19,7 +18,6 @@ function showAlert(message) {
     alertBox.classList.remove("show");
   }, 2500);
 }
-
 
 // ----- UTILITY PATH -----
 function getCardPaths(tipo, numero) {
@@ -47,65 +45,116 @@ function renderHand() {
 
   const spread = Math.min(60, 1200 / total);
   const center = (total - 1) / 2;
-
-  // Spacing che si dimezza ogni 5 carte
   const baseSpacing = 30;
-  const step = Math.floor((total - 1) / 5); // ogni 5 carte
-  const spacing = Math.max(3, baseSpacing / Math.pow(2, step)); // dimezza ogni step
+  const step = Math.floor((total - 1) / 5);
+  const spacing = Math.max(3, baseSpacing / Math.pow(2, step));
 
   mano.forEach((card, index) => {
     const angle = (index - center) * (spread / total);
     const cardEl = document.createElement("div");
-    cardEl.className = "card";
+    cardEl.className = `card ${card.new ? 'fade-in' : ''}`;
     cardEl.style.transform = `rotate(${angle}deg) translateY(${Math.abs(angle) * 0.6}px)`;
-
     cardEl.style.left = `calc(50% - 40px + ${(index - center) * spacing}px)`;
-    cardEl.style.backgroundImage = `url('${card.flipped ? card.back : card.front}')`;
+    delete card.new; // Rimuove il flag dopo il primo render
+
+    const cardInner = document.createElement("div");
+    cardInner.className = "card-inner";
+    if (card.flipped) cardInner.style.transform = "rotateY(180deg)";
+
+    const front = document.createElement("div");
+    front.className = "card-front";
+    front.style.backgroundImage = `url('${card.front}')`;
+
+    const back = document.createElement("div");
+    back.className = "card-back";
+    back.style.backgroundImage = `url('${card.back}')`;
+
+    cardInner.appendChild(front);
+    cardInner.appendChild(back);
+    cardEl.appendChild(cardInner);
 
     let holdTimer;
     let wasHeld = false;
 
-    const startHold = () => {
+    // Modifica nella funzione renderHand
+      const startHold = () => {
       wasHeld = false;
       holdTimer = setTimeout(() => {
-        wasHeld = true;
-        const isMobile = window.innerWidth <= 768;
-        cardEl.style.transform = `scale(3)`;
-        cardEl.style.position = 'fixed';
-        cardEl.style.top = '60%';
-        cardEl.style.left = isMobile ? '40%' : '50%';
-        cardEl.style.zIndex = 999;
-      }, 500);
-    };
+          wasHeld = true;
 
-    const endHold = () => {
-      clearTimeout(holdTimer);
-      if (!wasHeld) {
+          // Calcola la posizione del centro rispetto alla viewport
+          const cardRect = cardEl.getBoundingClientRect();
+          
+          // Coordinate centro carta
+          const cardCenterX = cardRect.left + cardRect.width / 2;
+          const cardCenterY = cardRect.top + cardRect.height / 2;
+          
+          // Coordinate centro schermo
+          const targetX = window.innerWidth / 2;
+          const targetY = window.innerHeight / 2;
+          
+          // Differenza da compensare
+          const deltaX = targetX - cardCenterX;
+          const deltaY = targetY - cardCenterY;
+
+          // Salva stato originale
+          cardEl.dataset.originalTransform = cardEl.style.transform;
+          cardEl.dataset.originalTransformOrigin = cardEl.style.transformOrigin;
+
+          // Applica trasformazioni
+          cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          cardEl.style.transformOrigin = 'center'; // Importante per lo scaling
+          cardEl.style.transform = `
+              translate(${deltaX}px, ${deltaY}px) 
+              scale(3) 
+              rotate(0deg)
+          `;
+          cardEl.style.zIndex = '999';
+
+      }, 500);
+  };
+
+      const endHold = () => {
+        clearTimeout(holdTimer);
+        
+        if (wasHeld) {
+          // Ripristina la trasformazione originale
+          cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          cardEl.style.transform = cardEl.dataset.originalTransform;
+          
+          setTimeout(() => {
+            cardEl.style.transition = '';
+            cardEl.style.zIndex = '';
+            delete cardEl.dataset.originalTransform;
+          }, 300);
+        } else {
+        // Gestione flip normale
+        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
         card.flipped = !card.flipped;
       }
-      renderHand();
     };
 
-    cardEl.addEventListener("mousedown", (e) => {
-      e.preventDefault();
-      startHold();
-    });
+      const handleRelease = () => {
+        endHold();
+        document.removeEventListener('mouseup', handleRelease);
+        document.removeEventListener('touchend', handleRelease);
+      };
 
-    cardEl.addEventListener("mouseup", endHold);
+      cardEl.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        document.addEventListener('mouseup', handleRelease);
+        startHold();
+      });
 
-    cardEl.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      startHold();
-    });
-
-    cardEl.addEventListener("touchend", endHold);
+      cardEl.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        document.addEventListener('touchend', handleRelease);
+        startHold();
+      });
 
     hand.appendChild(cardEl);
   });
 }
-
-
-
 
 function renderMiracoli() {
   for (let i = 0; i < 7; i++) {
@@ -113,17 +162,29 @@ function renderMiracoli() {
     const card = miracoli[i];
 
     if (card) {
-      slot.style.backgroundImage = `url('${card.flipped ? card.back : card.front}')`;
+      slot.innerHTML = '';
+      const cardInner = document.createElement("div");
+      cardInner.className = "card-inner";
+      if (card.flipped) cardInner.style.transform = "rotateY(180deg)";
 
-      slot.replaceWith(slot.cloneNode(true));
-      const newSlot = document.getElementById(`mir${i + 1}`);
+      const front = document.createElement("div");
+      front.className = "card-front";
+      front.style.backgroundImage = `url('${card.front}')`;
+
+      const back = document.createElement("div");
+      back.className = "card-back";
+      back.style.backgroundImage = `url('${card.back}')`;
+
+      cardInner.appendChild(front);
+      cardInner.appendChild(back);
+      slot.appendChild(cardInner);
 
       let holdTimer;
       let isHold = false;
 
       const handleFlip = () => {
+        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
         card.flipped = !card.flipped;
-        renderMiracoli();
       };
 
       const startZoom = (e) => {
@@ -131,60 +192,60 @@ function renderMiracoli() {
         isHold = false;
         holdTimer = setTimeout(() => {
           isHold = true;
-          newSlot.style.transform = "scale(3)";
-          newSlot.style.zIndex = "999";
+          slot.style.transform = "scale(3) translateZ(100px)";
+          slot.style.zIndex = "999";
         }, 300);
       };
 
       const endZoom = () => {
         clearTimeout(holdTimer);
         if (isHold) {
-          newSlot.style.transform = "";
-          newSlot.style.zIndex = "";
+          slot.style.transform = "";
+          slot.style.zIndex = "";
         }
       };
 
-      newSlot.addEventListener('click', (e) => {
-        if (!isHold) handleFlip(e);
-      });
+      slot.onclick = (e) => !isHold && handleFlip();
+      slot.ontouchend = (e) => !isHold && handleFlip();
+      slot.addEventListener('mousedown', startZoom);
+      slot.addEventListener('mouseup', endZoom);
+      slot.addEventListener('touchstart', startZoom, { passive: false });
+      slot.addEventListener('touchend', endZoom);
 
-      newSlot.addEventListener('touchend', (e) => {
-        if (!isHold) handleFlip(e);
-      });
-
-      newSlot.addEventListener('mousedown', startZoom);
-      newSlot.addEventListener('mouseup', endZoom);
-      newSlot.addEventListener('mouseleave', endZoom);
-
-      newSlot.addEventListener('touchstart', startZoom, { passive: false });
-      newSlot.addEventListener('touchmove', endZoom);
-      newSlot.addEventListener('touchend', endZoom);
-      newSlot.addEventListener('touchcancel', endZoom);
     } else {
-      slot.style.backgroundImage = "";
-      const newSlot = slot.cloneNode(true);
-      slot.replaceWith(newSlot);
+      slot.innerHTML = '';
+      slot.style.transform = "";
     }
   }
 }
 
-
-
 function renderPersonaggio() {
   const slot = document.getElementById("personaggio");
+  slot.innerHTML = '';
 
   if (personaggio) {
-    slot.style.backgroundImage = `url('${personaggio.flipped ? personaggio.back : personaggio.front}')`;
+    const cardInner = document.createElement("div");
+    cardInner.className = "card-inner";
+    if (personaggio.flipped) cardInner.style.transform = "rotateY(180deg)";
 
-    slot.replaceWith(slot.cloneNode(true));
-    const newSlot = document.getElementById("personaggio");
+    const front = document.createElement("div");
+    front.className = "card-front";
+    front.style.backgroundImage = `url('${personaggio.front}')`;
+
+    const back = document.createElement("div");
+    back.className = "card-back";
+    back.style.backgroundImage = `url('${personaggio.back}')`;
+
+    cardInner.appendChild(front);
+    cardInner.appendChild(back);
+    slot.appendChild(cardInner);
 
     let holdTimer;
     let isHold = false;
 
     const handleFlip = () => {
+      cardInner.style.transform = personaggio.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
       personaggio.flipped = !personaggio.flipped;
-      renderPersonaggio();
     };
 
     const startZoom = (e) => {
@@ -192,49 +253,39 @@ function renderPersonaggio() {
       isHold = false;
       holdTimer = setTimeout(() => {
         isHold = true;
-        newSlot.style.transform = "scale(3)";
-        newSlot.style.zIndex = "999";
+        slot.style.transform = "scale(3) translateZ(100px)";
+        slot.style.zIndex = "999";
       }, 300);
     };
 
     const endZoom = () => {
       clearTimeout(holdTimer);
       if (isHold) {
-        newSlot.style.transform = "";
-        newSlot.style.zIndex = "";
+        slot.style.transform = "";
+        slot.style.zIndex = "";
       }
     };
 
-    newSlot.addEventListener('click', (e) => {
-      if (!isHold) handleFlip(e);
-    });
-
-    newSlot.addEventListener('touchend', (e) => {
-      if (!isHold) handleFlip(e);
-    });
-
-    newSlot.addEventListener('mousedown', startZoom);
-    newSlot.addEventListener('mouseup', endZoom);
-    newSlot.addEventListener('mouseleave', endZoom);
-
-    newSlot.addEventListener('touchstart', startZoom, { passive: false });
-    newSlot.addEventListener('touchmove', endZoom);
-    newSlot.addEventListener('touchend', endZoom);
-    newSlot.addEventListener('touchcancel', endZoom);
-
-  } else {
-    slot.style.backgroundImage = "";
-    const newSlot = slot.cloneNode(true);
-    slot.replaceWith(newSlot);
+    slot.onclick = (e) => !isHold && handleFlip();
+    slot.ontouchend = (e) => !isHold && handleFlip();
+    slot.addEventListener('mousedown', startZoom);
+    slot.addEventListener('mouseup', endZoom);
+    slot.addEventListener('touchstart', startZoom, { passive: false });
+    slot.addEventListener('touchend', endZoom);
   }
 }
-
-
 
 // ----- AGGIUNTA -----
 function addCard(tipo, numero) {
   const { front, back } = getCardPaths(tipo, numero);
-  const card = { tipo, numero, front, back, flipped: false };
+  const card = { 
+    tipo, 
+    numero, 
+    front, 
+    back, 
+    flipped: false,
+    new: true // Flag per animazione fade-in
+  };
 
   if (tipo === "oggetto") {
     if (mano.length >= 30) return showAlert("Non puoi avere più di 30 oggetti nella mano!");
@@ -243,9 +294,8 @@ function addCard(tipo, numero) {
     }
     mano.push(card);
     renderHand();
-    closeModal(); // Aggiunto qui
+    closeModal();
   }
-
   else if (tipo === "miracolo") {
     if (miracoli.filter(m => m).length >= 7) return showAlert("Non puoi avere più di 7 miracoli!");
     if (miracoli.find(m => m && m.numero === numero)) {
@@ -255,21 +305,44 @@ function addCard(tipo, numero) {
     if (emptyIndex !== -1) {
       miracoli[emptyIndex] = card;
       renderMiracoli();
-      closeModal(); // Aggiunto qui
+      closeModal();
     }
   }
-
   else if (tipo === "personaggio") {
     if (personaggio !== null) {
       showAlert("Hai già un personaggio! Rimuovilo prima.");
-      return; // Aggiunto return per evitare esecuzione successiva
+      return;
     }
     personaggio = card;
     renderPersonaggio();
-    closeModal(); // Aggiunto qui
+    closeModal();
   }
 }
-    
+
+
+
+
+// ----- AGGIUNTA CARTA -----
+function showAdd(tipo) {
+  modal.style.display = "flex";
+  modalContent.innerHTML = `<h3>Seleziona un ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</h3>`;
+  const max = tipo === "oggetto" ? 30 : 
+             tipo === "miracolo" ? 7 : 
+             6; // 6 personaggi
+
+  for (let i = 1; i <= max; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = `${tipo} ${i}`;
+    btn.onclick = () => {
+      addCard(tipo, i);
+      closeModal();
+    };
+    modalContent.appendChild(btn);
+  }
+}
+
+
+
 function showRemove(tipo) {
   if (tipo === "oggetto" && mano.length === 0) {
     return showAlert("Non hai oggetti da rimuovere!");
@@ -283,70 +356,85 @@ function showRemove(tipo) {
 
   modal.style.display = "flex";
   modalContent.innerHTML = `<h3>Rimuovi un ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</h3>`;
-  if (tipo === "oggetto") {
+
+ const animateAndRemove = (element, callback) => {
+    const cardInner = element.querySelector('.card-inner');
+    if (!cardInner) return;
+    
+    cardInner.classList.add("destroying");
+    cardInner.addEventListener('animationend', () => {
+      element.innerHTML = ''; // Svuota il contenitore
+      callback();
+    }, { once: true });
+  };
+
+    if (tipo === "oggetto") {
     mano.forEach((card, index) => {
       const btn = document.createElement("button");
       btn.textContent = `${card.tipo} ${card.numero}`;
       btn.onclick = () => {
-        mano.splice(index, 1);
-        renderHand();
-        closeModal();
+        // Trova la carta corretta usando l'ID univoco
+        const cardEl = Array.from(hand.children).find(el => 
+          el.querySelector('.card-front')?.style.backgroundImage.includes(`oggetto${card.numero}.png`)
+        );
+        
+        if (!cardEl) return;
+        
+        cardEl.style.transition = 'none'; // Disabilita transizioni
+        cardEl.classList.add("destroying");
+        
+        cardEl.addEventListener('animationend', () => {
+          mano.splice(index, 1);
+          renderHand();
+          closeModal();
+        }, { once: true });
       };
       modalContent.appendChild(btn);
     });
   }
 
+  // Miracoli
   if (tipo === "miracolo") {
     miracoli.forEach((card, i) => {
       if (card) {
         const btn = document.createElement("button");
         btn.textContent = `${card.tipo} ${card.numero}`;
         btn.onclick = () => {
-          miracoli[i] = null;
-          renderMiracoli();
-          closeModal();
+          const slot = document.getElementById(`mir${i + 1}`);
+          animateAndRemove(slot, () => {
+            miracoli[i] = null;
+            renderMiracoli(); // Ricarica lo stato normale
+            closeModal();
+          });
         };
         modalContent.appendChild(btn);
       }
     });
   }
 
+  // Personaggio
   if (tipo === "personaggio") {
     const btn = document.createElement("button");
     btn.textContent = `${personaggio.tipo} ${personaggio.numero}`;
     btn.onclick = () => {
-      personaggio = null;
-      renderPersonaggio();
-      closeModal(); // Assicurati che venga chiamato
+      const slot = document.getElementById("personaggio");
+      animateAndRemove(slot, () => {
+        personaggio = null;
+        renderPersonaggio(); // Ricarica lo stato normale
+        closeModal();
+      });
     };
     modalContent.appendChild(btn);
   }
 }
 
-
-// ----- AGGIUNTA -----
-function showAdd(tipo) {
-  modal.style.display = "flex";
-
-  modalContent.innerHTML = `<h3>Seleziona un ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</h3>`;
-  const max = tipo === "oggetto" ? 30 : tipo === "miracolo" ? 7 : 6; // 6 personaggi disponibili
-
-  for (let i = 1; i <= max; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = `${tipo} ${i}`;
-    btn.onclick = () => {
-      addCard(tipo, i);
-      closeModal();
-    };
-    modalContent.appendChild(btn);
-  }
-}
 
 // ----- MODAL -----
 function closeModal() {
   modal.style.display = "none";
-  modalContent.innerHTML = ""; // Pulisci il contenuto
+  modalContent.innerHTML = "";
 }
+
 // ----- RESET -----
 function clearGame() {
   if (confirm("Vuoi davvero pulire la partita?")) {
@@ -359,8 +447,6 @@ function clearGame() {
     localStorage.clear();
   }
 }
-
-
 
 // ----- STORAGE -----
 function saveState() {
@@ -388,8 +474,6 @@ modal.addEventListener("click", e => {
   if (e.target === modal) closeModal();
 });
 
-
-
 // ----- INFO -----
 function showInfo() {
   modal.style.display = "flex";
@@ -400,23 +484,16 @@ function showInfo() {
     <li>Un click fa girare la carta</li>
     <li>Se si esce dalla pagina, al rientro i dati saranno salvati,per eliminarli cliccare su "Pulisci partita"</li>
     <li>Non si possono avere carte uguali.</li>
-  </ul>
-`;
-
+  </ul>`;
 }
-
 
 function toggleMenu() {
   const menu = document.getElementById("menuButtons");
   const container = document.querySelector(".menu-container");
-
   menu.classList.toggle("show");
   container.classList.toggle("open");
 }
 
-
-
 function goHome(){
-
   window.location.href = '/index.html';
 }

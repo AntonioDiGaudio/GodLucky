@@ -22,20 +22,23 @@
        <div class="menu-container">
     <button class="burger" onclick="toggleMenu()">☰ Menu</button>
     <div class="buttons" id="menuButtons">
-      <button onclick="showAdd('personaggio')">Aggiungi personaggio<br>➕🧙‍♂️ </button>
-      <button onclick="showRemove('personaggio')">Rimuovi personaggio<br>➖🧙‍♂️</button>
-      <button onclick="showAdd('oggetto')">Aggiungi oggetto<br>➕🧰</button>
-      <button onclick="showRemove('oggetto')">Rimuovi oggetto<br>➖🧰</button>
-      <button onclick="showAdd('miracolo')">Aggiungi miracolo<br>➕✨</button> 
-      <button onclick="showRemove('miracolo')">Rimuovi miracolo<br>➖✨ </button>
-      <button onclick="showInfo()">Funzionalità<br>ℹ️</button>
-      <button onclick="clearGame()">Pulisci partita<br>🧹</button>
-      <button onclick="goHome()">Vai alla Home<br>🏠</button>
+      <div class="menu-button-burger">
+        <button class="button-menu" onclick="goHome()">Vai alla Home<br>🏠</button>
+        <button class="button-menu" onclick="clearGame()">Pulisci partita<br>🧹</button>
+      <button class="button-menu" onclick="showInfo()">Funzionalità<br>ℹ️</button>
+     
+          </div>
+
+
     </div>
   </div>
     
     <div class="section-title">MIRACOLI</div>
-    <div class="miracoli">
+      <div class="setion-title-intern">
+    <button onclick="showAdd('miracolo')">➕</button> 
+    <button onclick="showRemove('miracolo')">➖</button>
+    </div>
+       <div class="miracoli">
       <div class="slot" id="mir1"></div>
       <div class="slot" id="mir2"></div>
       <div class="slot" id="mir3"></div>
@@ -45,7 +48,12 @@
       <div class="slot" id="mir7"></div>
     </div>
 
-    <div class="section-title">DIVINITÀ</div>
+    <div class="section-title">DIVINITA'</div>
+          <div class="setion-title-intern">
+        <button onclick="showAdd('personaggio')">➕</button>
+      <button onclick="showRemove('personaggio')">➖</button>
+          </div>
+
     <div class="personaggio-container">
       <div class="personaggio" id="personaggio"></div>
     </div>
@@ -55,6 +63,10 @@
 
 
     <div class="section-title">MANO</div>
+    <div class="setion-title-intern">
+       <button onclick="showAdd('oggetto')">➕</button>
+      <button onclick="showRemove('oggetto')">➖</button>
+    </div>
     <div class="hand-container">
       <div class="hand" id="hand"></div>
     </div>

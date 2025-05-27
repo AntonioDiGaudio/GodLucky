@@ -30,6 +30,7 @@ body {
 }
 
 .slot, .personaggio {
+    position: relative; 
   width: 80px;
   height: 120px;
   background: #ffffff85;
@@ -67,7 +68,6 @@ body {
 }
 
 button {
-  text-decoration: none;
   background-color: #2f000a;
   color:white;
   border-radius: 8px;
@@ -75,7 +75,22 @@ button {
   transition: background-color 0.3s ease;
   padding:4%;
   font-size: 14px;
-  margin:1%
+  margin:1%;
+  width: 40%;
+
+}
+
+
+.button-menu {
+  background-color: #2f000a;
+  color:white;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  padding:4%;
+  font-size: 14px;
+  margin:1%;
+ width: 9rem;
 
 }
 
@@ -90,7 +105,7 @@ button {
 }
 
 .modal-content {
-  background: #ffffffdb;
+  background: #e7e7e7;
   padding: 20px;
   overflow-y: auto;
   max-height: 80vh;
@@ -99,7 +114,7 @@ button {
   align-items: center;
   gap: 10px; /* Spazio tra i bottoni */
   border-radius: 10px;
-  width: 80%;
+  width: 60%;
 }
 
 
@@ -110,8 +125,15 @@ button {
   text-align: center;
   color: #e0004e;
   text-decoration: overline;
+  display: grid;
+  justify-items: center;
 }
 
+
+.setion-title-intern{
+  width: 100%;
+  margin-bottom: 5%;
+}
 
 #custom-alert {
   position: fixed;
@@ -180,12 +202,14 @@ button {
   margin: 10px auto;
   border: none;
   cursor: pointer;
+  width: 30%;
 }
 
 /* Mobile */
 @media (max-width: 767px) {
   .burger {
     display: block;
+    width: 36%;
   }
 
   .buttons {
@@ -195,9 +219,28 @@ button {
     margin-top: 10px;
   }
 
+   button {
+    width: 45%;
+  }
+
   .buttons.show {
     display: grid;
   }
+  .modal-content{
+    width: 60%;
+  }
+}
+
+/* Desktop */
+@media (min-width: 767px) {
+ .menu-button-burger{
+  display: flex;
+ }
+
+  button {
+    width: 31%;
+  }
+
 }
 
 
@@ -206,10 +249,86 @@ button {
   padding: 10px;
   align-items: center;
   border-radius: 10px;
+  transition: all 0.3s ease; 
 
 }
 
 
 .menu-container.open {
   background: #ffffffa1; 
+  justify-items: center;
+    transition: all 0.3s ease; 
 }
+
+
+
+
+
+
+
+/* Animazione Flip 3D */
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* Animazione Distruzione */
+@keyframes destroy {
+  to {
+    transform: scale(0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.destroying {
+  animation: destroy 0.5s ease forwards;
+}
+
+/* Animazione Fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.card {
+  transform-origin: bottom center; 
+  transition-property: transform, bottom, bottom !important;
+
+  will-change: transform;
+}
+
+.card[data-original-transform] {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@media (max-width: 767px) {
+  .card {
+    margin-left: 20px !important; /* Regola il valore a piacere */
+  }
+}
+
+
