@@ -5,6 +5,8 @@ const modalContent = document.getElementById("modal-content");
 let mano = [];
 let miracoli = new Array(7).fill(null);
 let personaggio = null;
+let oggettiBanditi = new Set();
+
 
 // ----- PERSISTENZA -----
 window.addEventListener("beforeunload", saveState);
@@ -348,9 +350,10 @@ function showAdd(tipo) {
     esistenti.add(personaggio.numero);
   }
 
-  // Mostra solo i bottoni delle carte non ancora presenti
+  // Mostra solo i bottoni delle carte non ancora presenti e non bandite
   for (let i = 1; i <= max; i++) {
-    if (!esistenti.has(i)) {
+    const èBandita = tipo === "oggetto" && oggettiBanditi.has(i);
+    if (!esistenti.has(i) && !èBandita) {
       const btn = document.createElement("button");
       btn.textContent = `${tipo} ${i}`;
       btn.onclick = () => {
@@ -364,11 +367,10 @@ function showAdd(tipo) {
   // Se nessuna carta è disponibile, mostra un messaggio
   if (modalContent.children.length === 1) { // solo l'h3
     const msg = document.createElement("p");
-    msg.textContent = `Hai già tutte le carte ${tipo}!`;
+    msg.textContent = `Hai già tutte le carte ${tipo} disponibili!`;
     modalContent.appendChild(msg);
   }
 }
-
 
 
 
@@ -386,7 +388,7 @@ function showRemove(tipo) {
   modal.style.display = "flex";
   modalContent.innerHTML = `<h3>Rimuovi un ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</h3>`;
 
- const animateAndRemove = (element, callback) => {
+  const animateAndRemove = (element, callback) => {
     const cardInner = element.querySelector('.card-inner');
     if (!cardInner) return;
     
@@ -397,8 +399,11 @@ function showRemove(tipo) {
     }, { once: true });
   };
 
-    if (tipo === "oggetto") {
+  // Oggetti
+  if (tipo === "oggetto") {
     mano.forEach((card, index) => {
+      if (oggettiBanditi.has(card.numero)) return; // Salta i banditi
+
       const btn = document.createElement("button");
       btn.textContent = `${card.tipo} ${card.numero}`;
       btn.onclick = () => {
@@ -432,7 +437,7 @@ function showRemove(tipo) {
           const slot = document.getElementById(`mir${i + 1}`);
           animateAndRemove(slot, () => {
             miracoli[i] = null;
-            renderMiracoli(); // Ricarica lo stato normale
+            renderMiracoli();
             closeModal();
           });
         };
@@ -449,11 +454,18 @@ function showRemove(tipo) {
       const slot = document.getElementById("personaggio");
       animateAndRemove(slot, () => {
         personaggio = null;
-        renderPersonaggio(); // Ricarica lo stato normale
+        renderPersonaggio();
         closeModal();
       });
     };
     modalContent.appendChild(btn);
+  }
+
+  // Se nessun bottone è stato aggiunto, mostra messaggio
+  if (modalContent.children.length === 1) {
+    const msg = document.createElement("p");
+    msg.textContent = `Non ci sono ${tipo} validi da rimuovere.`;
+    modalContent.appendChild(msg);
   }
 }
 
@@ -474,6 +486,7 @@ function clearGame() {
     renderMiracoli();
     renderPersonaggio();
     localStorage.clear();
+     oggettiBanditi = new Set();
   }
 }
 
@@ -482,13 +495,17 @@ function saveState() {
   localStorage.setItem("mano", JSON.stringify(mano));
   localStorage.setItem("miracoli", JSON.stringify(miracoli));
   localStorage.setItem("personaggio", JSON.stringify(personaggio));
+  localStorage.setItem("oggettiBanditi", JSON.stringify([...oggettiBanditi]));
+
 }
 
 function loadState() {
   const savedHand = localStorage.getItem("mano");
   const savedMiracoli = localStorage.getItem("miracoli");
   const savedPersonaggio = localStorage.getItem("personaggio");
-
+  const savedBanditi = localStorage.getItem("oggettiBanditi");
+  
+  if (savedBanditi) oggettiBanditi = new Set(JSON.parse(savedBanditi));
   if (savedHand) mano = JSON.parse(savedHand);
   if (savedMiracoli) miracoli = JSON.parse(savedMiracoli);
   if (savedPersonaggio) personaggio = JSON.parse(savedPersonaggio);
@@ -514,6 +531,7 @@ function showInfo() {
     <li>Un click fa girare la carta</li>
     <li>Se si esce dalla pagina, al rientro i dati saranno salvati,per eliminarli cliccare su "Pulisci partita"</li>
     <li>Non si possono avere carte uguali.</li>
+    <li>Puoi bandire una carta oggetto premendo su ❌, e non può piu essere aggiunta alla mano, se l'hai in mano ti verrà tolta dalla mano.Per resettare tutta la partitita e anche le carte oggetto,premere "Pulisci partita"</li>
     <li>Mi raccomando non barare e tieni lo schermo in modo che sia visibile a tutti i giocatori</li>
     
 
@@ -529,4 +547,40 @@ function toggleMenu() {
 
 function goHome(){
   window.location.href = '/index.html';
+}
+
+
+
+
+function showBanish() {
+  modal.style.display = "flex";
+  modalContent.innerHTML = "<h3>Bandisci una carta Oggetto</h3>";
+
+  for (let i = 1; i <= 24; i++) {
+    if (!oggettiBanditi.has(i)) {
+      const btn = document.createElement("button");
+      btn.textContent = `oggetto ${i}`;
+      btn.onclick = () => {
+        oggettiBanditi.add(i);
+
+        // Se è nella mano, rimuovila
+        const indexInHand = mano.findIndex(c => c.tipo === "oggetto" && c.numero === i);
+        if (indexInHand !== -1) {
+          mano.splice(indexInHand, 1);
+          renderHand();
+        }
+
+        closeModal();
+        showAlert(`Carta oggetto ${i} bandita`);
+      };
+      modalContent.appendChild(btn);
+    }
+  }
+
+  // Se tutte bandite
+  if (modalContent.children.length === 1) {
+    const msg = document.createElement("p");
+    msg.textContent = "Hai già bandito tutte le carte oggetto (1-24).";
+    modalContent.appendChild(msg);
+  }
 }

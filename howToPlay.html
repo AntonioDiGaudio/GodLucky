@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <link rel="stylesheet" href="static/styles/howToPlay.css">
+</head>
+<body>
+    <div class="logo">Video<span>Player</span></div>
+
+    <div class="container">
+        <h1 class="title" id="videoTitle">Video 1</h1>
+
+        <div class="video-container">
+            <video id="videoPlayer" controls>
+                <source src="" type="video/mp4">
+                Il tuo browser non supporta i video HTML5.
+            </video>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="prevBtn">◀</button>
+            <div class="counter"><span id="current">1</span>/<span id="total">3</span></div>
+            <button class="btn" id="nextBtn">▶</button>
+        </div>
+
+        <div class="video-list">
+            <h3>Elenco Video</h3>
+            <div class="thumbnails" id="thumbnailsContainer"></div>
+        </div>
+    </div>
+
+    <footer>
+        Video Player © 2025 - Tutti i diritti riservati
+    </footer>
+
+    <script src="js/howToPlay.js"></script>
+</body>
+</html>
