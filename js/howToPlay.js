@@ -1,21 +1,66 @@
 const videos = [
     {
-        title: "La natura in movimento",
+        title: "Trama",
         src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
         thumbnail: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
-        title: "Paesaggi mozzafiato",
+        title: "Informazioni generali",
         src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
         thumbnail: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
-        title: "Avventure in montagna",
+        title: "Componenti",
         src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
         thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     },
     {
-        title: "Vita sottomarina",
+        title: "Divinità",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        title: "Plancia",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        title: "Fasi di gioco",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        title: "Movimento",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        title: "Paradiso e inferno",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        title: "Carte miracolo",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        title: "Carte oggetto",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        title: "Il folle",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        title: "Battaglia",
+        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+    }, 
+    {
+        title: "Regole generali",
         src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
         thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     }
@@ -34,22 +79,36 @@ let currentVideoIndex = 0;
 function loadVideo(index) {
     if (index < 0 || index >= videos.length) return;
 
-    currentVideoIndex = index;
     const video = videos[index];
 
-    videoPlayer.src = video.src;
-    videoTitle.textContent = video.title;
-    currentEl.textContent = index + 1;
+    // Rimuovi animazioni precedenti
+    videoPlayer.classList.remove('fade-in');
+    videoPlayer.classList.add('fade');
 
-    prevBtn.disabled = index === 0;
-    nextBtn.disabled = index === videos.length - 1;
+    // Attendi che l'opacità scenda a 0, poi cambia video
+    setTimeout(() => {
+        currentVideoIndex = index;
 
-    document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === index);
-    });
+        videoPlayer.src = video.src;
+        videoTitle.textContent = video.title;
+        currentEl.textContent = index + 1;
 
-    videoPlayer.load();
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === videos.length - 1;
+
+        document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+            thumb.classList.toggle('active', i === index);
+        });
+
+        videoPlayer.load();
+
+        // Riapplica la classe fade-in
+        videoPlayer.classList.remove('fade');
+        videoPlayer.classList.add('fade-in');
+
+    }, 200); // tempo di fade-out
 }
+
 
 function createThumbnails() {
     thumbnailsContainer.innerHTML = '';
@@ -68,6 +127,8 @@ function createThumbnails() {
 function init() {
     totalEl.textContent = videos.length;
     createThumbnails();
+    enableCarouselDragging(thumbnailsContainer);
+
     loadVideo(0);
 
     prevBtn.addEventListener('click', () => {
@@ -80,3 +141,43 @@ function init() {
 }
 
 window.addEventListener('DOMContentLoaded', init);
+
+
+
+
+function enableCarouselDragging(container) {
+    let isDragging = false;
+    let startX = 0;
+    let scrollStart = 0;
+
+    container.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        container.classList.add('dragging');
+        startX = e.clientX;
+        scrollStart = container.scrollLeft;
+
+        container.setPointerCapture(e.pointerId);
+    });
+
+    container.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const scrollSpeed = 7; 
+        container.scrollLeft = scrollStart - dx * scrollSpeed;
+    });
+
+    container.addEventListener('pointerup', () => {
+        isDragging = false;
+        container.classList.remove('dragging');
+    });
+
+    container.addEventListener('pointercancel', () => {
+        isDragging = false;
+        container.classList.remove('dragging');
+    });
+}
+thumbnailsContainer.addEventListener('wheel', (e) => {
+    if (e.deltaY === 0) return;
+    e.preventDefault();
+    thumbnailsContainer.scrollLeft += e.deltaY;
+}, { passive: false });
