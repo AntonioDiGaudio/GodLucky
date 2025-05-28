@@ -49,6 +49,7 @@ function renderHand() {
   const step = Math.floor((total - 1) / 5);
   const spacing = Math.max(3, baseSpacing / Math.pow(2, step));
 
+  hand.offsetHeight;
   mano.forEach((card, index) => {
     const angle = (index - center) * (spread / total);
     const cardEl = document.createElement("div");
@@ -76,7 +77,7 @@ function renderHand() {
     let holdTimer;
     let wasHeld = false;
 
-    // Modifica nella funzione renderHand
+ 
       const startHold = () => {
       wasHeld = false;
       holdTimer = setTimeout(() => {
@@ -121,6 +122,8 @@ function renderHand() {
           // Ripristina la trasformazione originale
           cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
           cardEl.style.transform = cardEl.dataset.originalTransform;
+          void cardEl.offsetHeight;
+          
           
           setTimeout(() => {
             cardEl.style.transition = '';
@@ -326,20 +329,46 @@ function addCard(tipo, numero) {
 function showAdd(tipo) {
   modal.style.display = "flex";
   modalContent.innerHTML = `<h3>Seleziona un ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</h3>`;
+
   const max = tipo === "oggetto" ? 30 : 
              tipo === "miracolo" ? 7 : 
              6; // 6 personaggi
 
+  // Determina i numeri già usati in base al tipo
+  let esistenti = new Set();
+  if (tipo === "oggetto") {
+    mano.forEach(c => {
+      if (c.tipo === "oggetto") esistenti.add(c.numero);
+    });
+  } else if (tipo === "miracolo") {
+    miracoli.forEach(m => {
+      if (m) esistenti.add(m.numero);
+    });
+  } else if (tipo === "personaggio" && personaggio) {
+    esistenti.add(personaggio.numero);
+  }
+
+  // Mostra solo i bottoni delle carte non ancora presenti
   for (let i = 1; i <= max; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = `${tipo} ${i}`;
-    btn.onclick = () => {
-      addCard(tipo, i);
-      closeModal();
-    };
-    modalContent.appendChild(btn);
+    if (!esistenti.has(i)) {
+      const btn = document.createElement("button");
+      btn.textContent = `${tipo} ${i}`;
+      btn.onclick = () => {
+        addCard(tipo, i);
+        closeModal();
+      };
+      modalContent.appendChild(btn);
+    }
+  }
+
+  // Se nessuna carta è disponibile, mostra un messaggio
+  if (modalContent.children.length === 1) { // solo l'h3
+    const msg = document.createElement("p");
+    msg.textContent = `Hai già tutte le carte ${tipo}!`;
+    modalContent.appendChild(msg);
   }
 }
+
 
 
 
@@ -480,10 +509,14 @@ function showInfo() {
   modalContent.innerHTML = `
   <h3>Funzionalità</h3>
   <ul>
+    <li>Questo tool serve a simulare la propria mano, con miracoli carte miracolo e carta personaggio, potendole aggiugngere o rimuovere a piacimento</li>
     <li>Tenere premuto fa zoomare sulla carta</li>
     <li>Un click fa girare la carta</li>
     <li>Se si esce dalla pagina, al rientro i dati saranno salvati,per eliminarli cliccare su "Pulisci partita"</li>
     <li>Non si possono avere carte uguali.</li>
+    <li>Mi raccomando non barare e tieni lo schermo in modo che sia visibile a tutti i giocatori</li>
+    
+
   </ul>`;
 }
 
