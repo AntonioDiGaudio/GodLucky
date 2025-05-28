@@ -197,7 +197,7 @@ function renderMiracoli() {
         isHold = false;
         holdTimer = setTimeout(() => {
           isHold = true;
-          slot.style.transform = "scale(3) translateZ(100px)";
+          slot.style.transform = "scale(2.5) translateZ(100px)";
           slot.style.zIndex = "999";
         }, 300);
       };
@@ -258,7 +258,7 @@ function renderPersonaggio() {
       isHold = false;
       holdTimer = setTimeout(() => {
         isHold = true;
-        slot.style.transform = "scale(3) translateZ(100px)";
+        slot.style.transform = "scale(2.5) translateZ(100px)";
         slot.style.zIndex = "999";
       }, 300);
     };
@@ -477,8 +477,9 @@ function closeModal() {
 }
 
 // ----- RESET -----
-function clearGame() {
-  if (confirm("Vuoi davvero pulire la partita?")) {
+async function clearGame() {
+  const confirmed = await showConfirm("Vuoi davvero pulire la partita?");
+  if (confirmed) {
     mano = [];
     miracoli = new Array(7).fill(null);
     personaggio = null;
@@ -486,9 +487,11 @@ function clearGame() {
     renderMiracoli();
     renderPersonaggio();
     localStorage.clear();
-     oggettiBanditi = new Set();
+    oggettiBanditi = new Set();
+    showAlert("Partita pulita!");
   }
 }
+
 
 // ----- STORAGE -----
 function saveState() {
@@ -584,3 +587,97 @@ function showBanish() {
     modalContent.appendChild(msg);
   }
 }
+
+
+function showConfirm(message) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById("confirm-modal");
+    const msgBox = document.getElementById("confirm-message");
+    const yesBtn = document.getElementById("confirm-yes");
+    const noBtn = document.getElementById("confirm-no");
+
+    msgBox.textContent = message;
+    modal.classList.add("show");
+
+    const cleanup = () => {
+      modal.classList.remove("show");
+      yesBtn.removeEventListener("click", onYes);
+      noBtn.removeEventListener("click", onNo);
+    };
+
+    const onYes = () => {
+      cleanup();
+      resolve(true);
+    };
+    const onNo = () => {
+      cleanup();
+      resolve(false);
+    };
+
+    yesBtn.addEventListener("click", onYes);
+    noBtn.addEventListener("click", onNo);
+  });
+}
+
+
+
+function handleConfirmModalClick(event) {
+  const modal = document.getElementById("confirm-modal");
+  if (event.target === modal) {
+    modal.classList.remove("show");
+  }
+}
+
+
+
+
+
+
+const menu = document.getElementById('context-menu');
+
+// Aggiungi queste variabili per le dimensioni del menu
+let menuWidth = 0;
+let menuHeight = 0;
+
+// Misura il menu al caricamento della pagina
+window.addEventListener('DOMContentLoaded', () => {
+    menu.style.display = 'block';
+    menuWidth = menu.offsetWidth;
+    menuHeight = menu.offsetHeight;
+    menu.style.display = 'none';
+});
+
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    
+    // Controlla se una modale è aperta
+    const mainModal = document.getElementById('modal');
+    const confirmModal = document.getElementById('confirm-modal');
+    
+    if (mainModal.style.display === 'flex' || confirmModal.classList.contains('show')) {
+        return; // Non mostrare il menu contestuale
+    }
+    
+    // Calcola le coordinate
+    let x = e.pageX;
+    let y = e.pageY;
+    
+    // Regola se va oltre il bordo destro
+    if (x + menuWidth > window.innerWidth) {
+        x = window.innerWidth - menuWidth;
+    }
+    
+    // Regola se va oltre il bordo inferiore
+    if (y + menuHeight > window.innerHeight) {
+        y = window.innerHeight - menuHeight;
+    }
+    
+    menu.style.top = `${y}px`;
+    menu.style.left = `${x}px`;
+    menu.style.display = 'block';
+});
+
+document.addEventListener('click', function () {
+    menu.style.display = 'none';
+});
+

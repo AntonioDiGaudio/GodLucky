@@ -7,8 +7,27 @@
   <link rel="stylesheet" href="static/styles/fillYourHand.css">
   
 </head>
+
+
 <body>
+
+  <ul id="context-menu" class="context-menu">
+    <li onclick="location.href='index.html'">🏠 Ritorna alla home</li>
+    <li onclick="location.href='howToPlay.html'">🎮 Come giocare</li>
+  </ul>
+  
+          <div id="confirm-modal" class="modal" onclick="handleConfirmModalClick(event)">
+      <div class="modal-confirm-content">
+        <p id="confirm-message">Vuoi davvero resettare la partita?</p>
+        <div class="modal-confirm-buttons">
+          <button id="confirm-yes">Sì</button>
+          <button id="confirm-no">No</button>
+        </div>
+      </div>
+    </div>
+
   <div id="custom-alert"></div>
+  
   
     <div class="board">
        <div class="top-image-container">
