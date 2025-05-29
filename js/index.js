@@ -47,3 +47,88 @@ document.addEventListener('contextmenu', function (e) {
 document.addEventListener('click', function () {
     menu.style.display = 'none';
 });
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Gestione navbar mobile
+  const burgerNavbar = document.getElementById('burger-navbar');
+  const navLinks = document.getElementById('navLinks');
+  
+  if (burgerNavbar && navLinks) {
+    burgerNavbar.addEventListener('click', function() {
+      navLinks.classList.toggle('active');
+    });
+  }
+
+  // Gestione blog
+  const blogContainer = document.getElementById('blog-container');
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  
+  let articles = [];
+  let currentIndex = 0;
+  const articlesPerLoad = 1;
+
+  // Funzione per caricare gli articoli dal JSON
+  async function fetchArticles() {
+    try {
+      const response = await fetch('data/blog.json');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      articles = await response.json();
+      
+      // Ordinamento per data (dal più recente)
+      articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      // Carica i primi articoli
+      loadArticles();
+    } catch (error) {
+      console.error('Error fetching blog articles:', error);
+      blogContainer.innerHTML = `<p class="error-message">Impossibile caricare gli articoli del blog. Riprova più tardi.</p>`;
+    }
+  }
+
+  function loadArticles() {
+    const endIndex = Math.min(currentIndex + articlesPerLoad, articles.length);
+    
+    for (; currentIndex < endIndex; currentIndex++) {
+      const article = articles[currentIndex];
+      const articleEl = document.createElement('article');
+      articleEl.classList.add('blog-article');
+      
+      // Formatta la data
+      const dateObj = new Date(article.date);
+      const formattedDate = dateObj.toLocaleDateString('it-IT', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      articleEl.innerHTML = `
+        <div class="article-header">
+          <h2>${article.title}</h2>
+          <div class="article-meta">
+            <span class="article-date">${formattedDate}</span>
+            <span class="article-subtitle">${article.subtitle}</span>
+          </div>
+        </div>
+        <div class="blog-article-content">${article.content}</div>
+      `;
+      blogContainer.appendChild(articleEl);
+    }
+
+    // Mostra/nascondi il pulsante
+    loadMoreBtn.style.display = currentIndex < articles.length ? 'block' : 'none';
+  }
+
+  // Inizializza il blog
+  fetchArticles();
+
+  // Gestione click sul pulsante
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', loadArticles);
+  }
+});

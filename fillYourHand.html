@@ -5,11 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>God Lucky</title>
   <link rel="stylesheet" href="static/styles/fillYourHand.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="static/images/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="static/images/favicon_io/site.webmanifest">
   
 </head>
 
 
 <body>
+    <div class="background-image"></div>
+
+      
 
   <ul id="context-menu" class="context-menu">
     <li onclick="location.href='index.html'">🏠 Ritorna alla home</li>
@@ -27,14 +34,25 @@
     </div>
 
   <div id="custom-alert"></div>
-  
+    <!-- Navbar -->
+        <nav class="navbar">
+          <div class="navbar-container">
+            <a href="index.html" class="logo">
+              <img src="static/images/logo-transparent.png" alt="Logo" />
+            </a>
+            <button class="burger-navbar" id="burger-navbar">
+              ☰
+            </button>
+            <ul class="nav-links" id="navLinks">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="howToPlay.html">Tutorial</a></li>
+              <li><a href="static/documents/regolamento.pdf" download>Regolamento</a></li>
+            </ul>
+          </div>
+    </nav>
   
     <div class="board">
-       <div class="top-image-container">
-        <a href="index.html">
-    <img src="static/images/logo-transparent.png" alt="Top Banner" class="top-image" />
-    </a>
-  </div>
+     
 
     <div id="custom-alert"></div>
 
@@ -42,7 +60,6 @@
     <button class="burger" onclick="toggleMenu()">☰ Menu</button>
     <div class="buttons" id="menuButtons">
       <div class="menu-button-burger">
-        <button class="button-menu" onclick="goHome()">Vai alla Home<br>🏠</button>
         <button class="button-menu" onclick="clearGame()">Pulisci partita<br>🧹</button>
       <button class="button-menu" onclick="showInfo()">Funzionalità<br>ℹ️</button>
      

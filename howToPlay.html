@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>God Lucky</title>
     <link rel="stylesheet" href="static/styles/howToPlay.css">
+    <link rel="stylesheet" href="static/styles/index.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="static/images/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="static/images/favicon_io/site.webmanifest">
 </head>
 <body>
 
@@ -13,12 +18,24 @@
     <li onclick="location.href='fillYourHand.html'">🃏 Riempi la tua mano</li>
   </ul>
 
-  
-    <div class="top-image-container">
-    <a href="index.html">
-    <img src="static/images/logo-transparent.png" alt="Top Banner" class="top-image" />
-    </a>
-  </div>
+    <div class="background-image"></div>
+
+    <!-- Navbar responsive -->
+    <nav class="navbar">
+        <div class="navbar-container">
+        <a href="index.html" class="logo">
+            <img src="static/images/logo-transparent.png" alt="Logo" />
+        </a>
+        <button class="burger-navbar" id="burger-navbar">
+            ☰
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="fillYourHand.html">Gioca</a></li>
+            <li><a href="howToPlay.html">Tutorial</a></li>
+            <li><a href="static/documents/regolamento.pdf" download>Regolamento</a></li>
+        </ul>
+        </div>
+    </nav>
 
     <div class="container">
         <h1 class="title" id="videoTitle">Video 1</h1>

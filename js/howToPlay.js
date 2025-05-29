@@ -235,3 +235,9 @@ document.addEventListener('contextmenu', function (e) {
 document.addEventListener('click', function () {
     menu.style.display = 'none';
 });
+
+
+
+document.getElementById('burger-navbar').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('active');
+});

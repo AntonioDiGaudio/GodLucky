@@ -8,6 +8,7 @@ let personaggio = null;
 let oggettiBanditi = new Set();
 
 
+
 // ----- PERSISTENZA -----
 window.addEventListener("beforeunload", saveState);
 window.addEventListener("DOMContentLoaded", loadState);
@@ -26,15 +27,15 @@ function getCardPaths(tipo, numero) {
   let folder = tipo === "miracolo" ? "miracoli" :
                tipo === "personaggio" ? "personaggi" : "oggetto";
 
-  let front = `/cards/${folder}/${tipo}${numero}.png`;
+  let front = `/static/images/cards/${folder}/${tipo}${numero}.png`;
   let back;
 
   if (tipo === "oggetto") {
-      back = numero >= 25 ? `/cards/${folder}/oggettoSacroBack.png` : `/cards/${folder}/oggettoBack.png`;
+      back = numero >= 25 ? `/static/images/cards/${folder}/oggettoSacroBack.png` : `/static/images/cards/${folder}/oggettoBack.png`;
   } else if (tipo === "miracolo") {
-    back = `/cards/${folder}/miracoloBack.png`;
+    back = `/static/images/cards/${folder}/miracoloBack.png`;
   } else if (tipo === "personaggio") {
-    back = `/cards/${folder}/personaggioBack${numero}.png`;
+    back = `/static/images/cards/${folder}/personaggioBack${numero}.png`;
   }
 
   return { front, back };
@@ -681,3 +682,11 @@ document.addEventListener('click', function () {
     menu.style.display = 'none';
 });
 
+
+
+
+
+
+document.getElementById('burger-navbar').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('active');
+});

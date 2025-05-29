@@ -5,34 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>God Lucky</title>
   <link rel="stylesheet" href="static/styles/index.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="static/images/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="static/images/favicon_io/site.webmanifest">
 </head>
 <body>
 
-   <ul id="context-menu" class="context-menu">
-     <li onclick="location.href='howToPlay.html'">🎮 Come giocare</li>
-     <li onclick="location.href='fillYourHand.html'">🃏 Riempi la tua mano</li>
-  </ul>
+  <!-- Background full screen -->
   <div class="background-image"></div>
 
+  <ul id="context-menu" class="context-menu">
+    <li onclick="location.href='index.html'">🏠 Ritorna alla home</li>
+    <li onclick="location.href='howToPlay.html'">🎮 Come giocare</li>
+  </ul>
 
-  <div class="top-image-container">
-    <a href="index.html">
-    <img src="static/images/logo-transparent.png" alt="Top Banner" class="top-image" />
-    </a>
-  </div>
-
-  <div class="content">
-    <img src="static/sketch animation/loop.gif" alt="Loop GIF" class="loop-gif" />
-
-    <div class="buttons">
-      <a href="howToPlay.html" class="btn">Come giocare</a>
-      <a href="fillYourHand.html" class="btn">Riempi la tua mano</a>
-      <a href="static/documents/regolamento.pdf" download id="downloadBtn" class="btn">
-        Scarica il regolamento
+  <!-- Navbar responsive -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="logo">
+        <img src="static/images/logo-transparent.png" alt="Logo" />
       </a>
-
+      <button class="burger-navbar" id="burger-navbar">
+        ☰
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="fillYourHand.html">Gioca</a></li>
+        <li><a href="howToPlay.html">Tutorial</a></li>
+        <li><a href="static/documents/regolamento.pdf" download>Regolamento</a></li>
+      </ul>
     </div>
-  </div>
-  <script src="js/index.js"></script>
+  </nav>
+
+          <div class="content">
+          <h1 class="blog-title">Bacheca e avvisi</h1>
+          <div id="blog-container">
+            <!-- Gli articoli verranno aggiunti dinamicamente qui -->
+          </div>
+          <button id="load-more-btn" class="btn">Carica di più</button>
+        </div>
+
+<script src="js/index.js"></script>
 </body>
 </html>

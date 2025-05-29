@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "Nuovo Piattaforma",
+    "subtitle": "Miglioramenti e nuove funzionalità",
+    "date": "2023-10-15",
+    "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..</p><img src='data/blog_asset/background.jpg' alt='Nuovo design'><p>La stabilità del sistema è stata notevolmente migliorata. Ecco un video che mostra le nuove funzionalità:</p><video controls><source src='data/blog_asset/1.mp4' type='video/mp4'>Il tuo browser non supporta i video.</video><p>Per ulteriori dettagli, consulta il <a href='https://example.com/changelog' target='_blank'>registro delle modifiche</a>.</p><p>Non dimenticare di <strong>aggiornare l'app</strong> per godere di tutte le novità!</p><p><a href='https://example.com/download' class='btn'>Scarica l'aggiornamento</a><a href='fillYourHand.html' class='btn'>Prova ora</a></p>"
+  },
+  {
+    "id": 2,
+    "title": "Torneo di primavera",
+    "subtitle": "Subtitle",
+    "date": "2023-09-22",
+    "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><ul><li>Oggetti esclusivi</li><li>Badge speciali per il profilo</li></ul><p>Le iscrizioni apriranno la prossima settimana. Preparatevi a sfidare i migliori giocatori!</p><iframe width='560' height='315' src='https://www.youtube.com/embed/T1bHNuXnIPs' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe><p>Per iscriverti, clicca sul pulsante qui sotto:</p><p><a href='tournament.html' class='btn'>Iscriviti al torneo</a><span style='font-size: 0.9em; display: block; margin-top: 5px;'>(Disponibile dal 1 giugno)</span></p>"
+  },
+  {
+    "id": 3,
+    "title": "Guida per principianti",
+    "subtitle": "Subtitle",
+    "date": "2023-08-10",
+    "content": "<p>Sei nuovo a God Lucky? Questa guida ti aiuterà a comprendere le <strong>meccaniche di base</strong> del gioco.</p><img src='data/blog_asset/background.jpg' alt='Guida per principianti'><p>Imparerai come:</p><ol><li>Costruire il tuo mazzo</li><li>Gestire le risorse</li><li>Sviluppare strategie vincenti</li></ol><p>Consulta anche la nostra <a href='howToPlay.html'>pagina del tutorial</a> per maggiori dettagli.</p><p>Pronto a iniziare?</p><p><a href='fillYourHand.html' class='btn'>Inizia a giocare ora</a></p>"
+  }
+]
