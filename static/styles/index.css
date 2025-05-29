@@ -205,6 +205,10 @@ body, html {
     
   }
 
+  .content{
+    width: 92%;
+  }
+
   .nav-links.active {
     padding: 1rem;
     background-color: #f0f0f0;
