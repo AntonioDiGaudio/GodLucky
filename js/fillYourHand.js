@@ -31,6 +31,7 @@ function getCardPaths(tipo, numero) {
   let back;
 
   if (tipo === "oggetto") {
+     
       back = numero >= 25 ? `/static/images/cards/${folder}/oggettoSacroBack.png` : `/static/images/cards/${folder}/oggettoBack.png`;
   } else if (tipo === "miracolo") {
     back = `/static/images/cards/${folder}/miracoloBack.png`;
@@ -43,6 +44,7 @@ function getCardPaths(tipo, numero) {
 
 // ----- RENDER -----
 function renderHand() {
+  
   hand.innerHTML = "";
   const total = mano.length;
 
@@ -110,7 +112,7 @@ function renderHand() {
           cardEl.style.transformOrigin = 'center'; // Importante per lo scaling
           cardEl.style.transform = `
               translate(${deltaX}px, ${deltaY}px) 
-              scale(3) 
+              scale(4.2) 
               rotate(0deg)
           `;
           cardEl.style.zIndex = '999';
@@ -198,23 +200,42 @@ function renderMiracoli() {
         isHold = false;
         holdTimer = setTimeout(() => {
           isHold = true;
-          slot.style.transform = "scale(2.5) translateZ(100px)";
-          slot.style.zIndex = "999";
+
+          const rect = slot.getBoundingClientRect();
+
+          slot.dataset.originalStyle = slot.getAttribute("style") || "";
+
+          slot.style.position = "fixed";
+          slot.style.left = `35%`;
+          slot.style.top = `${(window.innerHeight - rect.height) / 2}px`;
+          slot.style.width = `${rect.width}px`;
+          slot.style.height = `${rect.height}px`;
+          slot.style.transform = "scale(4)";
+          slot.style.zIndex = "9999";
+          slot.style.transition = "transform 0.3s, left 0.3s, top 0.3s";
         }, 300);
       };
 
-      const endZoom = () => {
-        clearTimeout(holdTimer);
-        if (isHold) {
-          slot.style.transform = "";
-          slot.style.zIndex = "";
-        }
-      };
+    const endZoom = () => {
+      clearTimeout(holdTimer);
+      if (isHold) {
+        // Ripristina stile originale
+        slot.setAttribute("style", slot.dataset.originalStyle || "");
+        delete slot.dataset.originalStyle;
+      }
+    };
+
 
       slot.onclick = (e) => !isHold && handleFlip();
       slot.ontouchend = (e) => !isHold && handleFlip();
-      slot.addEventListener('mousedown', startZoom);
-      slot.addEventListener('mouseup', endZoom);
+      slot.addEventListener('mousedown', (e) => {
+        startZoom(e);
+        const onMouseUp = () => {
+          endZoom();
+          document.removeEventListener('mouseup', onMouseUp);
+        };
+        document.addEventListener('mouseup', onMouseUp);
+      });
       slot.addEventListener('touchstart', startZoom, { passive: false });
       slot.addEventListener('touchend', endZoom);
 
@@ -259,7 +280,7 @@ function renderPersonaggio() {
       isHold = false;
       holdTimer = setTimeout(() => {
         isHold = true;
-        slot.style.transform = "scale(2.5) translateZ(100px)";
+        slot.style.transform = "scale(4.5) translateZ(100px)";
         slot.style.zIndex = "999";
       }, 300);
     };
@@ -292,6 +313,7 @@ function addCard(tipo, numero) {
     flipped: false,
     new: true // Flag per animazione fade-in
   };
+
 
   if (tipo === "oggetto") {
     if (mano.length >= 30) return showAlert("Non puoi avere più di 30 oggetti nella mano!");
