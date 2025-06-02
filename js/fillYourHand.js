@@ -122,25 +122,24 @@ function renderHand() {
 
       const endHold = () => {
         clearTimeout(holdTimer);
-        
+
         if (wasHeld) {
-          // Ripristina la trasformazione originale
+          // Se è stato fatto lo zoom, NON fare il flip
           cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
           cardEl.style.transform = cardEl.dataset.originalTransform;
           void cardEl.offsetHeight;
-          
-          
           setTimeout(() => {
             cardEl.style.transition = '';
             cardEl.style.zIndex = '';
             delete cardEl.dataset.originalTransform;
           }, 300);
         } else {
-        // Gestione flip normale
-        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-        card.flipped = !card.flipped;
-      }
-    };
+          // Flip SOLO se NON c'è stato lo zoom
+          cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+          card.flipped = !card.flipped;
+        }
+      };
+
 
       const handleRelease = () => {
         endHold();
@@ -228,9 +227,13 @@ function renderMiracoli() {
         if (isHold) {
           slot.setAttribute("style", slot.dataset.originalStyle || "");
           delete slot.dataset.originalStyle;
-          // Resetta lo stato dopo lo zoom
-          setTimeout(() => { isHold = false; }, 100);
+          // Resetta lo stato dopo lo zoom SOLO dopo la transizione
+          slot.addEventListener('transitionend', function handler() {
+            isHold = false;
+            slot.removeEventListener('transitionend', handler);
+          });
         }
+
       };
 
 
@@ -281,11 +284,10 @@ function renderPersonaggio() {
     const handleFlip = () => {
       // Non permettere flip durante lo zoom
       if (!isHold) {
-        cardInner.style.transform = personaggio.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-        personaggio.flipped = !personaggio.flipped;
+        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+        card.flipped = !card.flipped;
       }
     };
-
     const startZoom = (e) => {
       e.preventDefault();
       isHold = false;
@@ -298,12 +300,17 @@ function renderPersonaggio() {
 
     const endZoom = () => {
       clearTimeout(holdTimer);
-      if (isHold) {
+     if (isHold) {
         slot.style.transform = "";
         slot.style.zIndex = "";
-        // Resetta lo stato dopo lo zoom
-        setTimeout(() => { isHold = false; }, 100);
+        // Resetta lo stato dopo la transizione
+        slot.addEventListener('transitionend', function handler() {
+          isHold = false;
+          slot.removeEventListener('transitionend', handler);
+        });
       }
+
+
     };
 
    slot.onclick = (e) => !isHold && handleFlip();
@@ -725,3 +732,4 @@ document.addEventListener('click', function () {
 document.getElementById('burger-navbar').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('active');
 });
+
