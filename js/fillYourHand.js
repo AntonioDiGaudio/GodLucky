@@ -47,6 +47,7 @@ function getCardPaths(tipo, numero) {
 
 // ----- RENDER -----
 function renderHand() {
+  
   hand.innerHTML = "";
   const total = mano.length;
 
@@ -63,7 +64,7 @@ function renderHand() {
     cardEl.className = `card ${card.new ? 'fade-in' : ''}`;
     cardEl.style.transform = `rotate(${angle}deg) translateY(${Math.abs(angle) * 0.6}px)`;
     cardEl.style.left = `calc(50% - 40px + ${(index - center) * spacing}px)`;
-    delete card.new;
+    delete card.new; // Rimuove il flag dopo il primo render
 
     const cardInner = document.createElement("div");
     cardInner.className = "card-inner";
@@ -81,90 +82,118 @@ function renderHand() {
     cardInner.appendChild(back);
     cardEl.appendChild(cardInner);
 
-    let holdTimer;
-    let wasHeld = false;
+      let holdTimer;
+      let wasHeld = false;
 
-    const handleFlip = () => {
-      if (!isZoomingHandCard) {
-        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-        card.flipped = !card.flipped;
-      }
-    };
-
-    const startHold = () => {
+      const handleFlip = () => {
+        if (!isZoomingHandCard) {
+          cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+          card.flipped = !card.flipped;
+        }
+      };
+ 
+      const startHold = () => {
       wasHeld = false;
       holdTimer = setTimeout(() => {
-        wasHeld = true;
-        isZoomingHandCard = true;
-        // Calcola la posizione del centro rispetto alla viewport
-        const cardRect = cardEl.getBoundingClientRect();
-        const cardCenterX = cardRect.left + cardRect.width / 2;
-        const cardCenterY = cardRect.top + cardRect.height / 2;
-        const targetX = window.innerWidth / 2;
-        const targetY = window.innerHeight / 2;
-        const deltaX = targetX - cardCenterX;
-        const deltaY = targetY - cardCenterY;
+          wasHeld = true;
+          isZoomingHandCard = true
 
-        cardEl.dataset.originalTransform = cardEl.style.transform;
-        cardEl.dataset.originalTransformOrigin = cardEl.style.transformOrigin;
+          // Calcola la posizione del centro rispetto alla viewport
+          const cardRect = cardEl.getBoundingClientRect();
+          
+          // Coordinate centro carta
+          const cardCenterX = cardRect.left + cardRect.width / 2;
+          const cardCenterY = cardRect.top + cardRect.height / 2;
+          
+          // Coordinate centro schermo
+          const targetX = window.innerWidth / 2;
+          const targetY = window.innerHeight / 2;
+          
+          // Differenza da compensare
+          const deltaX = targetX - cardCenterX;
+          const deltaY = targetY - cardCenterY;
 
-        cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-        cardEl.style.transformOrigin = 'center';
-        cardEl.style.transform = `
-          translate(${deltaX}px, ${deltaY}px) 
-          scale(4.2) 
-          rotate(0deg)
-        `;
-        cardEl.style.zIndex = '999';
+          // Salva stato originale
+          cardEl.dataset.originalTransform = cardEl.style.transform;
+          cardEl.dataset.originalTransformOrigin = cardEl.style.transformOrigin;
+
+          // Applica trasformazioni
+          cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          cardEl.style.transformOrigin = 'center'; // Importante per lo scaling
+          cardEl.style.transform = `
+              translate(${deltaX}px, ${deltaY}px) 
+              scale(4.2) 
+              rotate(0deg)
+          `;
+          cardEl.style.zIndex = '999';
+
       }, 500);
-    };
+  };
 
-    const endHold = () => {
-      clearTimeout(holdTimer);
-      if (wasHeld) {
-        cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-        cardEl.style.transform = cardEl.dataset.originalTransform;
-        void cardEl.offsetHeight;
-        setTimeout(() => {
-          cardEl.style.transition = '';
-          cardEl.style.zIndex = '';
-          delete cardEl.dataset.originalTransform;
-          isZoomingHandCard = false;
-        }, 300);
-      } else {
-        handleFlip();
-      }
-    };
+      const endHold = () => {
+        clearTimeout(holdTimer);
 
-    const handleRelease = () => {
-      endHold();
-      document.removeEventListener('mouseup', handleRelease);
-      document.removeEventListener('touchend', handleRelease);
-    };
+        if (wasHeld) {
+          // Se è stato fatto lo zoom, NON fare il flip
+          cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          cardEl.style.transform = cardEl.dataset.originalTransform;
+          void cardEl.offsetHeight;
+          setTimeout(() => {
+            cardEl.style.transition = '';
+            cardEl.style.zIndex = '';
+            delete cardEl.dataset.originalTransform;
+            isZoomingHandCard = false;
+          }, 300);
+        } else {
+          if (!isZoomingHandCard) { 
+            cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+            card.flipped = !card.flipped;
+           }
+        }
+      };
 
-    cardEl.addEventListener("mousedown", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      document.addEventListener('mouseup', handleRelease);
-      startHold();
-    });
 
-    cardEl.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      document.addEventListener('touchend', handleRelease);
-      startHold();
-    });
+      const handleRelease = () => {
+        endHold();
+        document.removeEventListener('mouseup', handleRelease);
+        document.removeEventListener('touchend', handleRelease);
+      };
 
-    // Blocca flip diretto durante zoom anche su tap/click secondari
-    cardEl.addEventListener("click", (e) => {
-      e.stopPropagation();
-      handleFlip();
-    });
-    cardEl.addEventListener("touchend", (e) => {
-      e.stopPropagation();
-      handleFlip();
-    });
+      cardEl.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        // Blocca altri eventi durante l'azione
+        e.stopPropagation();
+        document.addEventListener('mouseup', handleRelease);
+        startHold();
+      });
+
+      cardEl.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        // Blocca altri eventi durante l'azione
+        e.stopPropagation();
+        document.addEventListener('touchend', handleRelease);
+        startHold();
+      });
+
+
+      cardEl.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (isZoomingHandCard) {
+          // Se stai zoomando, fai rientrare la carta, non fare flip
+          endHold();
+        } else {
+          handleFlip();
+        }
+      });
+      cardEl.addEventListener("touchend", (e) => {
+        e.stopPropagation();
+        if (isZoomingHandCard) {
+          endHold();
+        } else {
+          handleFlip();
+        }
+      });
+
 
     hand.appendChild(cardEl);
   });
