@@ -81,10 +81,11 @@ function renderHand() {
     cardInner.appendChild(back);
     cardEl.appendChild(cardInner);
 
+    // --- LOGICA EVENTI ---
     let holdTimer;
     let wasHeld = false;
+    let ignoreNextClick = false;
 
-    // Serve per sbloccare lo zoom da *qualsiasi* evento di rilascio o altro dito
     const cleanupZoom = () => {
       if (isZoomingHandCard) {
         cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
@@ -99,17 +100,35 @@ function renderHand() {
         }, 300);
       }
       clearTimeout(holdTimer);
+      // Rimuovi listeners temporanei
+      document.removeEventListener('touchstart', handleOutsideTouch, true);
+      document.removeEventListener('touchstart', handleMultiTouch, true);
+      document.removeEventListener('touchend', handleRelease, true);
+      document.removeEventListener('touchcancel', handleRelease, true);
+      document.removeEventListener('mouseup', handleRelease, true);
+      document.removeEventListener('mousemove', handlePointerMove, true);
     };
 
-    const handleFlip = () => {
-      // Flip solo se NON stiamo zoomando e non abbiamo appena fatto uno zoom
-      if (!isZoomingHandCard && !wasHeld) {
-        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-        card.flipped = !card.flipped;
+    // Tap fuori carta mentre zoommi
+    function handleOutsideTouch(e) {
+      if (isZoomingHandCard && !cardEl.contains(e.target)) {
+        cleanupZoom();
       }
-    };
+    }
+    function handleMultiTouch(e) {
+      if ((isZoomingHandCard || wasHeld) && e.touches && e.touches.length > 1) {
+        cleanupZoom();
+      }
+    }
+    function handlePointerMove() {
+      if (isZoomingHandCard || wasHeld) cleanupZoom();
+    }
+    function handleRelease() {
+      cleanupZoom();
+    }
 
-    const startHold = () => {
+    // START HOLD (zoom)
+    function startHold(e) {
       wasHeld = false;
       holdTimer = setTimeout(() => {
         wasHeld = true;
@@ -134,69 +153,58 @@ function renderHand() {
             rotate(0deg)
         `;
         cardEl.style.zIndex = '999';
+
+        // Aggiungi listeners globali per chiudere lo zoom su tap fuori o multitouch
+        document.addEventListener('touchstart', handleOutsideTouch, true);
+        document.addEventListener('touchstart', handleMultiTouch, true);
+        document.addEventListener('touchend', handleRelease, true);
+        document.addEventListener('touchcancel', handleRelease, true);
+        document.addEventListener('mouseup', handleRelease, true);
+        document.addEventListener('mousemove', handlePointerMove, true);
       }, 500);
-    };
+    }
 
-    // Gestione di TUTTI i modi per uscire dallo zoom
-    const endHold = () => {
-      cleanupZoom();
-      document.removeEventListener('mouseup', handleRelease);
-      document.removeEventListener('touchend', handleRelease);
-      document.removeEventListener('touchcancel', handleRelease);
-      document.removeEventListener('touchstart', handleMultiTouch);
-      document.removeEventListener('mousemove', handlePointerMove);
-    };
-
-    const handleRelease = () => {
-      endHold();
-    };
-
-    // Se tocco con un altro dito o muovo il mouse/touch durante lo zoom => esci subito
-    const handleMultiTouch = (e) => {
-      if (isZoomingHandCard || wasHeld) {
-        endHold();
-      }
-    };
-    const handlePointerMove = (e) => {
-      if (isZoomingHandCard || wasHeld) {
-        endHold();
-      }
-    };
-
+    // --- LISTENER DESKTOP ---
     cardEl.addEventListener("mousedown", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      document.addEventListener('mouseup', handleRelease);
-      document.addEventListener('mousemove', handlePointerMove);
-      startHold();
+      document.addEventListener('mouseup', handleRelease, true);
+      document.addEventListener('mousemove', handlePointerMove, true);
+      startHold(e);
     });
 
+    // --- LISTENER MOBILE ---
     cardEl.addEventListener("touchstart", (e) => {
       e.preventDefault();
       e.stopPropagation();
       if (e.touches && e.touches.length > 1) {
-        endHold();
+        cleanupZoom();
         return;
       }
-      document.addEventListener('touchend', handleRelease);
-      document.addEventListener('touchcancel', handleRelease);
-      document.addEventListener('touchstart', handleMultiTouch);
-      startHold();
-    });
+      startHold(e);
+    }, { passive: false });
 
-    // CLICK e TOUCHEND: flip SOLO se NON hai fatto lo zoom
+    // --- TAP PER FLIP ---
     cardEl.addEventListener("click", (e) => {
       e.stopPropagation();
+      if (ignoreNextClick) {
+        ignoreNextClick = false;
+        return;
+      }
       if (!isZoomingHandCard && !wasHeld) {
-        handleFlip();
+        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+        card.flipped = !card.flipped;
       }
     });
 
     cardEl.addEventListener("touchend", (e) => {
       e.stopPropagation();
       if (!isZoomingHandCard && !wasHeld) {
-        handleFlip();
+        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+        card.flipped = !card.flipped;
       }
+      // Dopo touchend su mobile ignora il prossimo click (per evitare doppio flip)
+      ignoreNextClick = true;
     });
 
     hand.appendChild(cardEl);
