@@ -150,12 +150,16 @@ function renderHand() {
 
       cardEl.addEventListener("mousedown", (e) => {
         e.preventDefault();
+        // Blocca altri eventi durante l'azione
+        e.stopPropagation();
         document.addEventListener('mouseup', handleRelease);
         startHold();
       });
 
       cardEl.addEventListener("touchstart", (e) => {
         e.preventDefault();
+        // Blocca altri eventi durante l'azione
+        e.stopPropagation();
         document.addEventListener('touchend', handleRelease);
         startHold();
       });
@@ -191,8 +195,11 @@ function renderMiracoli() {
       let isHold = false;
 
       const handleFlip = () => {
-        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-        card.flipped = !card.flipped;
+        // Non permettere flip durante lo zoom
+        if (!isHold) {
+          cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+          card.flipped = !card.flipped;
+        }
       };
 
       const startZoom = (e) => {
@@ -217,13 +224,14 @@ function renderMiracoli() {
       };
 
     const endZoom = () => {
-      clearTimeout(holdTimer);
-      if (isHold) {
-        // Ripristina stile originale
-        slot.setAttribute("style", slot.dataset.originalStyle || "");
-        delete slot.dataset.originalStyle;
-      }
-    };
+        clearTimeout(holdTimer);
+        if (isHold) {
+          slot.setAttribute("style", slot.dataset.originalStyle || "");
+          delete slot.dataset.originalStyle;
+          // Resetta lo stato dopo lo zoom
+          setTimeout(() => { isHold = false; }, 100);
+        }
+      };
 
 
       slot.onclick = (e) => !isHold && handleFlip();
@@ -271,8 +279,11 @@ function renderPersonaggio() {
     let isHold = false;
 
     const handleFlip = () => {
-      cardInner.style.transform = personaggio.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-      personaggio.flipped = !personaggio.flipped;
+      // Non permettere flip durante lo zoom
+      if (!isHold) {
+        cardInner.style.transform = personaggio.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+        personaggio.flipped = !personaggio.flipped;
+      }
     };
 
     const startZoom = (e) => {
@@ -290,10 +301,12 @@ function renderPersonaggio() {
       if (isHold) {
         slot.style.transform = "";
         slot.style.zIndex = "";
+        // Resetta lo stato dopo lo zoom
+        setTimeout(() => { isHold = false; }, 100);
       }
     };
 
-    slot.onclick = (e) => !isHold && handleFlip();
+   slot.onclick = (e) => !isHold && handleFlip();
     slot.ontouchend = (e) => !isHold && handleFlip();
     slot.addEventListener('mousedown', startZoom);
     slot.addEventListener('mouseup', endZoom);

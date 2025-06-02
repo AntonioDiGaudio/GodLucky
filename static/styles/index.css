@@ -104,6 +104,7 @@ body, html {
 .context-menu li {
   padding: 10px 15px;
   cursor: pointer;
+  text-align: center;
 }
 
 .context-menu li:hover {
@@ -119,7 +120,7 @@ body, html {
 
 @media (min-width: 819px) {
     .context-menu {
-        width: 14%;
+        width: 26%;
     }
 }
 
