@@ -195,7 +195,7 @@ function renderMiracoli() {
 
       const handleFlip = () => {
         // Non permettere flip durante lo zoom
-        if (!isHold) {
+        if (!isHold && card) {
           cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
           card.flipped = !card.flipped;
         }
@@ -257,6 +257,9 @@ function renderMiracoli() {
   }
 }
 
+
+
+
 function renderPersonaggio() {
   const slot = document.getElementById("personaggio");
   slot.innerHTML = '';
@@ -282,12 +285,13 @@ function renderPersonaggio() {
     let isHold = false;
 
     const handleFlip = () => {
-      // Non permettere flip durante lo zoom
+      // Flip solo se non si è in modalità zoom
       if (!isHold) {
-        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-        card.flipped = !card.flipped;
+        cardInner.style.transform = personaggio.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+        personaggio.flipped = !personaggio.flipped;
       }
     };
+
     const startZoom = (e) => {
       e.preventDefault();
       isHold = false;
@@ -300,27 +304,27 @@ function renderPersonaggio() {
 
     const endZoom = () => {
       clearTimeout(holdTimer);
-     if (isHold) {
+      if (isHold) {
         slot.style.transform = "";
         slot.style.zIndex = "";
-        // Resetta lo stato dopo la transizione
-        slot.addEventListener('transitionend', function handler() {
-          isHold = false;
-          slot.removeEventListener('transitionend', handler);
-        });
+        isHold = false; // Resetta subito
       }
-
-
     };
 
-   slot.onclick = (e) => !isHold && handleFlip();
-    slot.ontouchend = (e) => !isHold && handleFlip();
+    slot.onclick = handleFlip;
+    slot.ontouchend = handleFlip;
     slot.addEventListener('mousedown', startZoom);
     slot.addEventListener('mouseup', endZoom);
     slot.addEventListener('touchstart', startZoom, { passive: false });
     slot.addEventListener('touchend', endZoom);
+
   }
 }
+
+
+
+
+
 
 // ----- AGGIUNTA -----
 function addCard(tipo, numero) {
