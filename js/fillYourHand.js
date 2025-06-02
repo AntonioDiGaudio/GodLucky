@@ -82,9 +82,15 @@ function renderHand() {
     cardInner.appendChild(back);
     cardEl.appendChild(cardInner);
 
-    let holdTimer;
-    let wasHeld = false;
+      let holdTimer;
+      let wasHeld = false;
 
+      const handleFlip = () => {
+        if (!isZoomingHandCard) {
+          cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+          card.flipped = !card.flipped;
+        }
+      };
  
       const startHold = () => {
       wasHeld = false;
