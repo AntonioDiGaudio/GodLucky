@@ -47,7 +47,6 @@ function getCardPaths(tipo, numero) {
 
 // ----- RENDER -----
 function renderHand() {
-  
   hand.innerHTML = "";
   const total = mano.length;
 
@@ -82,122 +81,110 @@ function renderHand() {
     cardInner.appendChild(back);
     cardEl.appendChild(cardInner);
 
-      let holdTimer;
-      let wasHeld = false;
+    let holdTimer;
+    let wasHeld = false;
 
-      const handleFlip = () => {
-        if (!isZoomingHandCard) {
-          cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-          card.flipped = !card.flipped;
-        }
-      };
- 
-      const startHold = () => {
+    const handleFlip = () => {
+      // Flip solo se NON stiamo zoomando
+      if (!isZoomingHandCard) {
+        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+        card.flipped = !card.flipped;
+      }
+    };
+
+    const startHold = () => {
       wasHeld = false;
       holdTimer = setTimeout(() => {
-          wasHeld = true;
-          isZoomingHandCard = true
+        wasHeld = true;
+        isZoomingHandCard = true;
 
-          // Calcola la posizione del centro rispetto alla viewport
-          const cardRect = cardEl.getBoundingClientRect();
-          
-          // Coordinate centro carta
-          const cardCenterX = cardRect.left + cardRect.width / 2;
-          const cardCenterY = cardRect.top + cardRect.height / 2;
-          
-          // Coordinate centro schermo
-          const targetX = window.innerWidth / 2;
-          const targetY = window.innerHeight / 2;
-          
-          // Differenza da compensare
-          const deltaX = targetX - cardCenterX;
-          const deltaY = targetY - cardCenterY;
+        // Calcola la posizione del centro rispetto alla viewport
+        const cardRect = cardEl.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+        const cardCenterY = cardRect.top + cardRect.height / 2;
 
-          // Salva stato originale
-          cardEl.dataset.originalTransform = cardEl.style.transform;
-          cardEl.dataset.originalTransformOrigin = cardEl.style.transformOrigin;
+        // Coordinate centro schermo
+        const targetX = window.innerWidth / 2;
+        const targetY = window.innerHeight / 2;
 
-          // Applica trasformazioni
-          cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-          cardEl.style.transformOrigin = 'center'; // Importante per lo scaling
-          cardEl.style.transform = `
-              translate(${deltaX}px, ${deltaY}px) 
-              scale(4.2) 
-              rotate(0deg)
-          `;
-          cardEl.style.zIndex = '999';
+        // Differenza da compensare
+        const deltaX = targetX - cardCenterX;
+        const deltaY = targetY - cardCenterY;
+
+        // Salva stato originale
+        cardEl.dataset.originalTransform = cardEl.style.transform;
+        cardEl.dataset.originalTransformOrigin = cardEl.style.transformOrigin;
+
+        // Applica trasformazioni
+        cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        cardEl.style.transformOrigin = 'center';
+        cardEl.style.transform = `
+            translate(${deltaX}px, ${deltaY}px) 
+            scale(4.2) 
+            rotate(0deg)
+        `;
+        cardEl.style.zIndex = '999';
 
       }, 500);
-  };
+    };
 
-      const endHold = () => {
-        clearTimeout(holdTimer);
+    const endHold = () => {
+      clearTimeout(holdTimer);
 
-        if (wasHeld) {
-          // Se è stato fatto lo zoom, NON fare il flip
-          cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-          cardEl.style.transform = cardEl.dataset.originalTransform;
-          void cardEl.offsetHeight;
-          setTimeout(() => {
-            cardEl.style.transition = '';
-            cardEl.style.zIndex = '';
-            delete cardEl.dataset.originalTransform;
-            isZoomingHandCard = false;
-          }, 300);
-        } else {
-          if (!isZoomingHandCard) { 
-            cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-            card.flipped = !card.flipped;
-           }
-        }
-      };
+      if (wasHeld) {
+        // Se è stato fatto lo zoom, chiudi solo lo zoom, NON fare il flip!
+        cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        cardEl.style.transform = cardEl.dataset.originalTransform;
+        void cardEl.offsetHeight;
+        setTimeout(() => {
+          cardEl.style.transition = '';
+          cardEl.style.zIndex = '';
+          delete cardEl.dataset.originalTransform;
+          isZoomingHandCard = false;
+        }, 300);
+      }
+      // NESSUN flip qui!
+    };
 
+    const handleRelease = () => {
+      endHold();
+      document.removeEventListener('mouseup', handleRelease);
+      document.removeEventListener('touchend', handleRelease);
+    };
 
-      const handleRelease = () => {
-        endHold();
-        document.removeEventListener('mouseup', handleRelease);
-        document.removeEventListener('touchend', handleRelease);
-      };
+    cardEl.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      document.addEventListener('mouseup', handleRelease);
+      startHold();
+    });
 
-      cardEl.addEventListener("mousedown", (e) => {
-        e.preventDefault();
-        // Blocca altri eventi durante l'azione
-        e.stopPropagation();
-        document.addEventListener('mouseup', handleRelease);
-        startHold();
-      });
+    cardEl.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      document.addEventListener('touchend', handleRelease);
+      startHold();
+    });
 
-      cardEl.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        // Blocca altri eventi durante l'azione
-        e.stopPropagation();
-        document.addEventListener('touchend', handleRelease);
-        startHold();
-      });
+    // CLICK e TOUCHEND: flip SOLO se NON hai fatto lo zoom
+    cardEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!isZoomingHandCard && !wasHeld) {
+        handleFlip();
+      }
+    });
 
-
-      cardEl.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (isZoomingHandCard) {
-          // Se stai zoomando, fai rientrare la carta, non fare flip
-          endHold();
-        } else {
-          handleFlip();
-        }
-      });
-      cardEl.addEventListener("touchend", (e) => {
-        e.stopPropagation();
-        if (isZoomingHandCard) {
-          endHold();
-        } else {
-          handleFlip();
-        }
-      });
-
+    cardEl.addEventListener("touchend", (e) => {
+      e.stopPropagation();
+      if (!isZoomingHandCard && !wasHeld) {
+        handleFlip();
+      }
+    });
 
     hand.appendChild(cardEl);
   });
 }
+
 
 function renderMiracoli() {
   for (let i = 0; i < 7; i++) {
