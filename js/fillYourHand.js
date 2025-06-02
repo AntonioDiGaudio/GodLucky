@@ -63,7 +63,7 @@ function renderHand() {
     cardEl.className = `card ${card.new ? 'fade-in' : ''}`;
     cardEl.style.transform = `rotate(${angle}deg) translateY(${Math.abs(angle) * 0.6}px)`;
     cardEl.style.left = `calc(50% - 40px + ${(index - center) * spacing}px)`;
-    delete card.new; // Rimuove il flag dopo il primo render
+    delete card.new;
 
     const cardInner = document.createElement("div");
     cardInner.className = "card-inner";
@@ -84,9 +84,26 @@ function renderHand() {
     let holdTimer;
     let wasHeld = false;
 
+    // Serve per sbloccare lo zoom da *qualsiasi* evento di rilascio o altro dito
+    const cleanupZoom = () => {
+      if (isZoomingHandCard) {
+        cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        cardEl.style.transform = cardEl.dataset.originalTransform || "";
+        void cardEl.offsetHeight;
+        setTimeout(() => {
+          cardEl.style.transition = '';
+          cardEl.style.zIndex = '';
+          delete cardEl.dataset.originalTransform;
+          isZoomingHandCard = false;
+          wasHeld = false;
+        }, 300);
+      }
+      clearTimeout(holdTimer);
+    };
+
     const handleFlip = () => {
-      // Flip solo se NON stiamo zoomando
-      if (!isZoomingHandCard) {
+      // Flip solo se NON stiamo zoomando e non abbiamo appena fatto uno zoom
+      if (!isZoomingHandCard && !wasHeld) {
         cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
         card.flipped = !card.flipped;
       }
@@ -98,24 +115,17 @@ function renderHand() {
         wasHeld = true;
         isZoomingHandCard = true;
 
-        // Calcola la posizione del centro rispetto alla viewport
         const cardRect = cardEl.getBoundingClientRect();
         const cardCenterX = cardRect.left + cardRect.width / 2;
         const cardCenterY = cardRect.top + cardRect.height / 2;
 
-        // Coordinate centro schermo
         const targetX = window.innerWidth / 2;
         const targetY = window.innerHeight / 2;
 
-        // Differenza da compensare
         const deltaX = targetX - cardCenterX;
         const deltaY = targetY - cardCenterY;
 
-        // Salva stato originale
         cardEl.dataset.originalTransform = cardEl.style.transform;
-        cardEl.dataset.originalTransformOrigin = cardEl.style.transformOrigin;
-
-        // Applica trasformazioni
         cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
         cardEl.style.transformOrigin = 'center';
         cardEl.style.transform = `
@@ -124,45 +134,53 @@ function renderHand() {
             rotate(0deg)
         `;
         cardEl.style.zIndex = '999';
-
       }, 500);
     };
 
+    // Gestione di TUTTI i modi per uscire dallo zoom
     const endHold = () => {
-      clearTimeout(holdTimer);
-
-      if (wasHeld) {
-        // Se è stato fatto lo zoom, chiudi solo lo zoom, NON fare il flip!
-        cardEl.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-        cardEl.style.transform = cardEl.dataset.originalTransform;
-        void cardEl.offsetHeight;
-        setTimeout(() => {
-          cardEl.style.transition = '';
-          cardEl.style.zIndex = '';
-          delete cardEl.dataset.originalTransform;
-          isZoomingHandCard = false;
-        }, 300);
-      }
-      // NESSUN flip qui!
+      cleanupZoom();
+      document.removeEventListener('mouseup', handleRelease);
+      document.removeEventListener('touchend', handleRelease);
+      document.removeEventListener('touchcancel', handleRelease);
+      document.removeEventListener('touchstart', handleMultiTouch);
+      document.removeEventListener('mousemove', handlePointerMove);
     };
 
     const handleRelease = () => {
       endHold();
-      document.removeEventListener('mouseup', handleRelease);
-      document.removeEventListener('touchend', handleRelease);
+    };
+
+    // Se tocco con un altro dito o muovo il mouse/touch durante lo zoom => esci subito
+    const handleMultiTouch = (e) => {
+      if (isZoomingHandCard || wasHeld) {
+        endHold();
+      }
+    };
+    const handlePointerMove = (e) => {
+      if (isZoomingHandCard || wasHeld) {
+        endHold();
+      }
     };
 
     cardEl.addEventListener("mousedown", (e) => {
       e.preventDefault();
       e.stopPropagation();
       document.addEventListener('mouseup', handleRelease);
+      document.addEventListener('mousemove', handlePointerMove);
       startHold();
     });
 
     cardEl.addEventListener("touchstart", (e) => {
       e.preventDefault();
       e.stopPropagation();
+      if (e.touches && e.touches.length > 1) {
+        endHold();
+        return;
+      }
       document.addEventListener('touchend', handleRelease);
+      document.addEventListener('touchcancel', handleRelease);
+      document.addEventListener('touchstart', handleMultiTouch);
       startHold();
     });
 
@@ -184,6 +202,7 @@ function renderHand() {
     hand.appendChild(cardEl);
   });
 }
+
 
 
 function renderMiracoli() {
