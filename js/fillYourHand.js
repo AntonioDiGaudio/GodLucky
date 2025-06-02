@@ -2,6 +2,9 @@ const hand = document.getElementById("hand");
 const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modal-content");
 
+let isZoomingHandCard = false;
+let isZoomingMiracolo = false;
+let isZoomingPersonaggio = false;
 let mano = [];
 let miracoli = new Array(7).fill(null);
 let personaggio = null;
@@ -87,6 +90,7 @@ function renderHand() {
       wasHeld = false;
       holdTimer = setTimeout(() => {
           wasHeld = true;
+          isZoomingHandCard = true
 
           // Calcola la posizione del centro rispetto alla viewport
           const cardRect = cardEl.getBoundingClientRect();
@@ -132,11 +136,13 @@ function renderHand() {
             cardEl.style.transition = '';
             cardEl.style.zIndex = '';
             delete cardEl.dataset.originalTransform;
+            isZoomingHandCard = false;
           }, 300);
         } else {
-          // Flip SOLO se NON c'è stato lo zoom
-          cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-          card.flipped = !card.flipped;
+          if (!isZoomingHandCard) { 
+            cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+            card.flipped = !card.flipped;
+           }
         }
       };
 
@@ -191,11 +197,10 @@ function renderMiracoli() {
       slot.appendChild(cardInner);
 
       let holdTimer;
-      let isHold = false;
 
       const handleFlip = () => {
         // Non permettere flip durante lo zoom
-        if (!isHold && card) {
+        if (!isZoomingMiracolo && card) {
           cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
           card.flipped = !card.flipped;
         }
@@ -203,8 +208,8 @@ function renderMiracoli() {
 
       const startZoom = (e) => {
         e.preventDefault();
-        isHold = false;
         holdTimer = setTimeout(() => {
+          isZoomingMiracolo = true;
           isHold = true;
 
           const rect = slot.getBoundingClientRect();
@@ -224,21 +229,20 @@ function renderMiracoli() {
 
     const endZoom = () => {
         clearTimeout(holdTimer);
-        if (isHold) {
+        if (isZoomingMiracolo) {
           slot.setAttribute("style", slot.dataset.originalStyle || "");
           delete slot.dataset.originalStyle;
-          // Resetta lo stato dopo lo zoom SOLO dopo la transizione
           slot.addEventListener('transitionend', function handler() {
-            isHold = false;
-            slot.removeEventListener('transitionend', handler);
-          });
+          isZoomingMiracolo = false;
+          slot.removeEventListener('transitionend', handler);
+        });
         }
 
       };
 
 
-      slot.onclick = (e) => !isHold && handleFlip();
-      slot.ontouchend = (e) => !isHold && handleFlip();
+      slot.onclick = (e) => !isZoomingMiracolo && handleFlip();
+      slot.ontouchend = (e) => !isZoomingMiracolo && handleFlip();
       slot.addEventListener('mousedown', (e) => {
         startZoom(e);
         const onMouseUp = () => {
@@ -282,34 +286,31 @@ function renderPersonaggio() {
     slot.appendChild(cardInner);
 
     let holdTimer;
-    let isHold = false;
 
     const handleFlip = () => {
-      // Flip solo se non si è in modalità zoom
-      if (!isHold) {
-        cardInner.style.transform = personaggio.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-        personaggio.flipped = !personaggio.flipped;
-      }
-    };
+        if (!isZoomingPersonaggio) {
+          cardInner.style.transform = personaggio.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
+          personaggio.flipped = !personaggio.flipped;
+        }
+      };
 
     const startZoom = (e) => {
       e.preventDefault();
-      isHold = false;
       holdTimer = setTimeout(() => {
-        isHold = true;
+        isZoomingPersonaggio = true;
         slot.style.transform = "scale(4.5) translateZ(100px)";
         slot.style.zIndex = "999";
       }, 300);
     };
 
     const endZoom = () => {
-      clearTimeout(holdTimer);
-      if (isHold) {
-        slot.style.transform = "";
-        slot.style.zIndex = "";
-        isHold = false; // Resetta subito
-      }
-    };
+        clearTimeout(holdTimer);
+        if (isZoomingPersonaggio) {
+          slot.style.transform = "";
+          slot.style.zIndex = "";
+          isZoomingPersonaggio = false;
+        }
+      };
 
     slot.onclick = handleFlip;
     slot.ontouchend = handleFlip;
@@ -736,3 +737,4 @@ document.addEventListener('click', function () {
 document.getElementById('burger-navbar').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('active');
 });
+
