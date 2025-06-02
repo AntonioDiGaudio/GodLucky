@@ -202,23 +202,6 @@ cardEl.addEventListener("click", (e) => {
       }
     });
 
-    cardEl.addEventListener("touchend", (e) => {
-      e.stopPropagation();
-      // Se siamo in zoom, chiudiamo lo zoom e non flippiamo
-      if (isZoomingHandCard) {
-        cleanupZoom();
-        // Impediamo anche che il click nativo subito dopo faccia flip
-        ignoreNextClick = true;
-        return;
-      }
-      if (!wasHeld) {
-        cardInner.style.transform = card.flipped ? "rotateY(0deg)" : "rotateY(180deg)";
-        card.flipped = !card.flipped;
-      }
-      // Dopo un tap su mobile, ignora il prossimo click (per evitare doppio flip)
-      ignoreNextClick = true;
-    });
-
 
     cardEl.addEventListener("touchend", (e) => {
       e.stopPropagation();
