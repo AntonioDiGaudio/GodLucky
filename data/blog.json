@@ -1,23 +1,17 @@
 [
-  {
-    "id": 1,
-    "title": "Nuovo Piattaforma",
-    "subtitle": "Miglioramenti e nuove funzionalità",
-    "date": "2023-10-15",
-    "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..</p><img src='data/blog_asset/background.jpg' alt='Nuovo design'><p>La stabilità del sistema è stata notevolmente migliorata. Ecco un video che mostra le nuove funzionalità:</p><video controls><source src='data/blog_asset/1.mp4' type='video/mp4'>Il tuo browser non supporta i video.</video><p>Per ulteriori dettagli, consulta il <a href='https://example.com/changelog' target='_blank'>registro delle modifiche</a>.</p><p>Non dimenticare di <strong>aggiornare l'app</strong> per godere di tutte le novità!</p><p><a href='https://example.com/download' class='btn'>Scarica l'aggiornamento</a><a href='fillYourHand.html' class='btn'>Prova ora</a></p>"
-  },
-  {
-    "id": 2,
-    "title": "Torneo di primavera",
-    "subtitle": "Subtitle",
-    "date": "2023-09-22",
-    "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><ul><li>Oggetti esclusivi</li><li>Badge speciali per il profilo</li></ul><p>Le iscrizioni apriranno la prossima settimana. Preparatevi a sfidare i migliori giocatori!</p><iframe width='560' height='315' src='https://www.youtube.com/embed/T1bHNuXnIPs' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe><p>Per iscriverti, clicca sul pulsante qui sotto:</p><p><a href='tournament.html' class='btn'>Iscriviti al torneo</a><span style='font-size: 0.9em; display: block; margin-top: 5px;'>(Disponibile dal 1 giugno)</span></p>"
-  },
-  {
-    "id": 3,
-    "title": "Guida per principianti",
-    "subtitle": "Subtitle",
-    "date": "2023-08-10",
-    "content": "<p>Sei nuovo a God Lucky? Questa guida ti aiuterà a comprendere le <strong>meccaniche di base</strong> del gioco.</p><img src='data/blog_asset/background.jpg' alt='Guida per principianti'><p>Imparerai come:</p><ol><li>Costruire il tuo mazzo</li><li>Gestire le risorse</li><li>Sviluppare strategie vincenti</li></ol><p>Consulta anche la nostra <a href='howToPlay.html'>pagina del tutorial</a> per maggiori dettagli.</p><p>Pronto a iniziare?</p><p><a href='fillYourHand.html' class='btn'>Inizia a giocare ora</a></p>"
-  }
+{
+  "id": 1,
+  "title": "God Lucky: il Party Game di Death Kid e Corvo Spavaldo",
+  "subtitle": "Un’esplosione di divertimento in meno di un’ora: 6 divinità si affrontano per la supremazia",
+  "date": "2023-06-4",
+  "content": "<p>Death Kid e Corvo Spavaldo pubblicano il loro primo gioco indipendente. Party game a soli 25 euro. Veloce, divertente e per 6 giocatori. Le divinità dovranno scendere in campo, ma solo una potrà vincere.\n\nIn un mercato indie sempre più vivace, la nuova creazione di Death Kid e Corvo Spavaldo si distingue per semplicità e dinamicità: ogni sessione dura poco più di trenta minuti, ideale per serate tra amici o familiari. Il regolamento è intuitivo, pensato per far calare i giocatori nel pantheon degli dei senza lunghe spiegazioni preliminari.\n\nOgni partecipante veste i panni di una divinità pronta a conquistare potere e gloria: attraverso carte evento, sfide lampo e meccaniche di bluff, si accumulano punti divini mentre si ostacolano gli avversari. La tensione cresce ad ogni turno, perché basta un solo colpo di scena per ribaltare il risultato.\n\nIl prezzo di lancio è estremamente contenuto: 25 euro per un mazzo di carte, segnalini e un tabellone compatto. Il formato tascabile rende il gioco facilmente trasportabile, perfetto per chi ama organizzare sessioni last-minute in campeggio o in viaggio. Parallelamente, Death Kid e Corvo Spavaldo hanno curato artwork originali e coloratissimi, che richiamano le ambientazioni mitologiche in chiave ironica e frizzante.\n\nNon mancano suggerimenti di partite rapide \"on-the-go\" e varianti per personalizzare la durata del gioco, allungando o accorciando l’esperienza in base alla voglia di competizione. Un’opzione particolarmente apprezzata dagli appassionati di party game, sempre alla ricerca di titoli che non sacrifichino la rigiocabilità alla leggerezza del regolamento.\n\nCon questo debutto, Death Kid e Corvo Spavaldo dimostrano di saper combinare passione per il game design e spirito ironico: le divinità scendono in campo, e solo una potrà vincere. L’appuntamento per tutti gli aspiranti dei è nei negozi specializzati e online, dove il gioco è già disponibile per l’ordine.</p><img src='data/blog_asset/copertina.png' alt='Copertina'><p>Ecco il video della trama del gioco:</p><video controls><source src='static/tutorial/trama.mp4' type=\"video/mp4\">Il tuo browser non supporta i video.</video><p>Per ulteriori dettagli, consulta i video tutorial <a href='howToPlay.html' target='_blank'>clicca qui</a>.</p><p>Prova una mano del gioco</p><p><a href='fillYourHand.html' class='btn'>Gioca</a><a href='coinDiceSimulator.html' class='btn'>Prova il simulatore di dadi e monete</a></p>"
+},
+{
+  "id": 2,
+  "title": "La nuova piattaforma",
+  "subtitle": "Guida all'uso del sito del gioco God Lucky",
+  "date": "2023-06-3",
+  "content": "<p>Nella home, si possono vedere le notizie su God Lucky.</p>\n<p><a href=\"index.html\" class=\"btn\">Home</a></p>\n\n<p>Visita \"Mano\" per riempire la tua mano con le carte del gioco fisiche e scoprire tutte le funzionalità di questa pagina. Aggiungi le carte in base al codice in basso a destra scritto su ogni carta. Clicca su \"Funzionalità\" per vedere tutte le opzioni della pagina \"Mano\".</p>\n<p><a href=\"fillYourHand.html\" class=\"btn\">Riempi la tua mano</a></p>\n\n<p>Scarica il nostro regolamento ufficiale!</p>\n<p><a href=\"static/documents/regolamento.pdf\" class=\"btn\">Scarica il regolamento italiano in PDF</a></p>\n\n<p>Vedi i nostri video tutorial di gioco per imparare facilmente le regole di God Lucky.</p>\n<p><a href=\"howToPlay.html\" class=\"btn\">Video tutorial</a></p>\n\n<p>Gioca con la plancia online.</p>\n<p><a href=\"gameBoard.html\" class=\"btn\">Plancia online</a></p>\n\n<p>Se hai perso o non vuoi usare la moneta o i dadi del gioco, usa il nostro simulatore di lanci online!</p>\n<p><a href=\"coinDiceSimulator.html\" class=\"btn\">Simulatore lanci di moneta e dado</a></p>"
+
+}
 ]

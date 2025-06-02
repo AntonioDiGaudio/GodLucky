@@ -9,13 +9,39 @@
 </head>
 <body>
 
+
+  <div class="background-image"></div>
+
    <ul id="context-menu" class="context-menu">
     <li onclick="location.href='index.html'">🏠 Ritorna alla home</li>
     <li onclick="location.href='gameBoard.html'">📍 Plancia</li>
      <li onclick="location.href='howToPlay.html'">🎥 Tutorial</li>
-    <li onclick="location.href='fillYourHand.html'">🃏 Riempi la tua mano</li>
-    
+    <li onclick="location.href='fillYourHand.html'">🃏 Riempi la tua mano</li>    
   </ul>
+
+
+
+    <nav class="navbar">
+        <div class="navbar-container">
+        <a href="index.html" class="logo">
+            <img src="static/images/logo-transparent.png" alt="Logo" />
+        </a>
+        <button class="burger-navbar" id="burger-navbar">
+            ☰
+        </button>
+        <ul class="nav-links" id="navLinks">
+           <li><a href="index.html">Home</a></li>
+            <li><a href="fillYourHand.html">Gioca</a></li>
+            <li><a href="gameBoard.html">Plancia</a></li>
+            <li><a href="howToPlay.html">Tutorial</a></li>
+           
+        </ul>
+        </div>
+    </nav>
+
+
+
+    
   <div class="header">
     <h1>Simulatore di Moneta e Dadi</h1>
     <div class="subtitle">Clicca o trascina gli elementi per lanciarli</div>

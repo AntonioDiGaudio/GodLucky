@@ -783,4 +783,3 @@ document.addEventListener('click', function () {
 document.getElementById('burger-navbar').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('active');
 });
-

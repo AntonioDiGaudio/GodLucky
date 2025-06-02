@@ -117,6 +117,7 @@ function handleClick(e) {
 function logChange(index, statType, from, to) {
   const character = characters[index];
 
+  // Creo il div del log
   const line = document.createElement("div");
   line.innerHTML = `
     <span class="log-character">${character.name}</span>
@@ -125,10 +126,16 @@ function logChange(index, statType, from, to) {
     da ${from} a ${to}
   `;
 
-  // Inserisce in cima invece che in fondo
+  // Creo un <hr> come divisore
+  const divider = document.createElement("hr");
+  divider.style.border = "none";
+  divider.style.height = "1px";
+  divider.style.backgroundColor = "#ccc";  // colore grigio chiaro
+
+  // Inserisco prima il <div> e subito dopo l’<hr> in cima al logBox
+  logBox.insertBefore(divider, logBox.firstChild);
   logBox.insertBefore(line, logBox.firstChild);
 }
-
 
 // Caricamento da localStorage
 function loadState() {
@@ -246,4 +253,17 @@ document.addEventListener('contextmenu', function (e) {
 // Al click esterno, nascondiamo il menu
 document.addEventListener('click', function () {
     menu.style.display = 'none';
+});
+
+
+
+// Al click esterno, nascondiamo il menu
+document.addEventListener('click', function () {
+    menu.style.display = 'none';
+});
+
+
+
+document.getElementById('burger-navbar').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('active');
 });

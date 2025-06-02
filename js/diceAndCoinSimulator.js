@@ -5,7 +5,7 @@ const d6Cube = document.getElementById('d6cube');
 const d3Cube = document.getElementById('d3cube');
 
 // Imposta l'immagine di default per la moneta
-coinImg.style.backgroundImage = "url('static/images/coin/monetaDefault.png')";
+coinImg.style.backgroundImage = "url('static/images/coin/testa.png')";
 
 // Crea un numero centrato per la faccia del dado
 function createDiceNumber(face, num) {
@@ -51,7 +51,7 @@ function flipCoin() {
   coinImg.classList.add('flipping');
 
   result.textContent = 'La moneta sta girando...';
-  result.style.background = "rgba(46, 204, 113, 0.3)";
+  result.style.background = "#8f6f1247";
 
   const flipInterval = setInterval(() => {
     coinImg.style.backgroundImage = (frames % 2 === 0)
@@ -64,7 +64,7 @@ function flipCoin() {
         ? "url('static/images/coin/testa.png')"
         : "url('static/images/coin/croce.png')";
       result.textContent = 'Risultato moneta: ' + (isHead ? 'Testa' : 'Croce');
-      result.style.background = "rgba(46, 204, 113, 0.6)";
+      result.style.background = "#8f6f12";
     }
   }, intervalTime);
 }
@@ -146,21 +146,21 @@ function roll3dDice(cube, sides) {
 
 function rollD6() {
   result.textContent = 'Il dado D6 sta rollando...';
-  result.style.background = "rgba(52, 152, 219, 0.3)";
+  result.style.background = "#8059a38c";
   const resultValue = roll3dDice(d6Cube, 6);
   setTimeout(() => {
     result.textContent = 'Risultato dado: ' + resultValue;
-    result.style.background = "rgba(52, 152, 219, 0.6)";
+    result.style.background = "#8059a3";
   }, 1000);
 }
 
 function rollD3() {
   result.textContent = 'Il dado D3 sta rollando...';
-  result.style.background = "rgba(155, 89, 182, 0.3)";
+  result.style.background = "#777777ad";
   const resultValue = roll3dDice(d3Cube, 3);
   setTimeout(() => {
     result.textContent = 'Risultato dado: ' + resultValue;
-    result.style.background = "rgba(155, 89, 182, 0.6)";
+    result.style.background = "#777777)";
   }, 1000);
 }
 
@@ -226,4 +226,32 @@ document.addEventListener('contextmenu', function (e) {
 // Al click esterno, nascondiamo il menu
 document.addEventListener('click', function () {
     menu.style.display = 'none';
+});
+
+
+
+
+// Al click esterno, nascondiamo il menu
+document.addEventListener('click', function () {
+    menu.style.display = 'none';
+});
+
+
+
+
+function toggleMenu() {
+  const menu = document.getElementById("menuButtons");
+  const container = document.querySelector(".menu-container");
+  menu.classList.toggle("show");
+  container.classList.toggle("open");
+}
+
+function goHome(){
+  window.location.href = '/index.html';
+}
+
+
+
+document.getElementById('burger-navbar').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('active');
 });

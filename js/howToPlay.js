@@ -1,70 +1,71 @@
 const videos = [
     {
         title: "Trama",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "static/tutorial/trama.mp4",
+        thumbnail: "static/tutorial/trama_anteprima.png"
     },
     {
         title: "Informazioni generali",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "", // nessun video disponibile
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Componenti",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Divinità",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Plancia",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Fasi di gioco",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Movimento",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Paradiso e inferno",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Carte miracolo",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Carte oggetto",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Il folle",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     },
     {
         title: "Battaglia",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    }, 
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
+    },
     {
         title: "Regole generali",
-        src: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        thumbnail: "https://images.unsplash.com/photo-1439405326854-014607f694d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        src: "",
+        thumbnail: "static/tutorial/coming_soon.jpeg"
     }
 ];
+
 
 const videoPlayer = document.getElementById('videoPlayer');
 const videoTitle = document.getElementById('videoTitle');
@@ -76,35 +77,61 @@ const thumbnailsContainer = document.getElementById('thumbnailsContainer');
 
 let currentVideoIndex = 0;
 
+// howToPlay.js
+
 function loadVideo(index) {
     if (index < 0 || index >= videos.length) return;
 
     const video = videos[index];
 
-    // Rimuovi animazioni precedenti
+    // 1) Rimuovi animazioni precedenti
     videoPlayer.classList.remove('fade-in');
     videoPlayer.classList.add('fade');
 
-    // Attendi che l'opacità scenda a 0, poi cambia video
     setTimeout(() => {
         currentVideoIndex = index;
 
-        videoPlayer.src = video.src;
+        // Aggiorna titolo e contatore
         videoTitle.textContent = video.title;
         currentEl.textContent = index + 1;
 
+        // Disabilita/abilita i pulsanti Prev/Next
         prevBtn.disabled = index === 0;
         nextBtn.disabled = index === videos.length - 1;
 
+        // Evidenzia miniatura attiva
         document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
             thumb.classList.toggle('active', i === index);
         });
 
-        videoPlayer.load();
+        // 2) Se esiste un video valido (src !== ""), lo mostro; altrimenti mostro solo l'immagine
+        if (video.src && video.src.trim() !== "") {
+            // Caso "Trama" (con video):
+            // - Mostro il <video>
+            videoPlayer.style.display = 'block';
+            // - Nascondo l'<img> placeholder
+            document.getElementById('videoPlaceholder').style.display = 'none';
 
-        // Riapplica la classe fade-in
+            // Imposto la sorgente del video e lo ricarico
+            videoPlayer.src = video.src;
+            videoPlayer.load();
+        } else {
+            // Caso "Coming Soon" (senza video):
+            // - Nascondo il <video> (così non si vede l'area vuota)
+            videoPlayer.style.display = 'none';
+            // - Mostro l'<img> con la thumbnail (coming_soon.jpeg)
+            const placeholder = document.getElementById('videoPlaceholder');
+            placeholder.src = video.thumbnail;
+            placeholder.style.display = 'block';
+        }
+
+        // 3) Riapplica la classe fade-in (fade-in su chi è visibile)
+        //    Applichiamo fade-in a tutto il contenitore video, ma la creazione
+        //    dell'opacità riguarda l'elemento correntemente visibile.
         videoPlayer.classList.remove('fade');
         videoPlayer.classList.add('fade-in');
+        document.getElementById('videoPlaceholder').classList.remove('fade');
+        document.getElementById('videoPlaceholder').classList.add('fade-in');
 
     }, 200); // tempo di fade-out
 }

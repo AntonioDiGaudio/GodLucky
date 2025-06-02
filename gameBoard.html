@@ -11,6 +11,9 @@
 </head>
 <body>
 
+    <div class="background-image"></div>
+
+
 
    <ul id="context-menu" class="context-menu">
     <li onclick="location.href='index.html'">🏠 Ritorna alla home</li>
@@ -20,11 +23,34 @@
     
   </ul>
 
+  <nav class="navbar">
+        <div class="navbar-container">
+        <a href="index.html" class="logo">
+            <img src="static/images/logo-transparent.png" alt="Logo" />
+        </a>
+        <button class="burger-navbar" id="burger-navbar">
+            ☰
+        </button>
+        <ul class="nav-links" id="navLinks">
+              <li><a href="index.html">Home</a></li>
+            <li><a href="fillYourHand.html">Gioca</a></li>
+            <li><a href="howToPlay.html">Tutorial</a></li>
+            <li><a href="coinDiceSimulator.html">Simulatore</a></li>
+        </ul>
+        </div>
+    </nav>
+
 <div class="columns-container" id="columnsContainer"></div>
 <div id="logContainer">
   <h2>Storico delle azioni</h2>
+  <h2 style="text-align: center;
+    font-size: 12px !important;
+    color: white;">In alto il più recente</h2>
   <div id="log" class="log-box"></div>
 </div>
+<h2 style="text-align: center;
+    font-size: 15px !important;
+    color: white;">Attenzione! Dopo aver premuto il tasto in basso, tutti i valori ritorneranno agli stati iniziali</h2>
 <button class="reset-btn" onclick="resetAll()">Pulisci partita</button>
 
 

@@ -16,6 +16,19 @@ body {
 }
 
 
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/static/images/background.jpg'); 
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+
 .top-image-container {
   width: 100%;
   text-align: center;
@@ -33,10 +46,10 @@ body {
 .container {
     max-width: 900px;
     width: 100%;
-    background: rgba(0, 0, 0, 0.7);
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);
     padding: 30px;
     margin-top: 20px;
 }
@@ -46,8 +59,8 @@ body {
     font-size: 2.2rem;
     margin-bottom: 25px;
     padding: 10px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);    border-radius: 10px;
     color: white;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -128,7 +141,8 @@ video {
 
 .video-list {
     margin-top: 30px;
-    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);
     padding: 20px;
     border-radius: 15px;
 }
@@ -196,7 +210,8 @@ video {
 
 .indice {
     margin-top: 30px;
-    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);
     padding: 20px;
     border-radius: 15px;
     display: flex;
@@ -383,8 +398,8 @@ footer {
   padding: 1rem 2rem;
   display: flex;
   justify-content: center;
-  position: sticky;
-  top: 0;
+  position: static;
+  top: 4%;
   left: 0;
   z-index: 10;
 }
@@ -396,6 +411,7 @@ footer {
   justify-content: space-between;
   align-items: center;
   margin-top: -3%;
+  padding: 2%;
 }
 
 .logo img {
@@ -457,12 +473,17 @@ footer {
     pointer-events: auto;
     margin-right: 2%;
     text-align: center;
+    margin-top: 3%;
     
   }
 
   .burger-navbar {
     display: block;
   }
+
+  .logo img {
+    width: 22% !important;
+}
 }
 
 @media (min-width: 473px) and (max-width: 765px) {
@@ -482,4 +503,48 @@ footer {
 }
  
 
+}
+
+
+
+
+/* howToPlay.css */
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    margin-bottom: 25px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+}
+
+/* già esistente per il <video> */
+video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #000;
+    border-radius: 15px;
+}
+
+/* Nuovo stile per l'<img> placeholder */
+#videoPlaceholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    background: #000; /* può restare nero sotto, o togli se non serve */
+    display: none;     /* di default è nascosto */
+}
+.logo img {
+    margin-top: 2%;
+    width: 14%;
 }

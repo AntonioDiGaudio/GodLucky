@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>God Lucky</title>
     <link rel="stylesheet" href="static/styles/howToPlay.css">
-    <link rel="stylesheet" href="static/styles/index.css" />
     <link rel="apple-touch-icon" sizes="180x180" href="static/images/favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon_io/favicon-16x16.png">
     <link rel="manifest" href="static/images/favicon_io/site.webmanifest">
 </head>
 <body>
+    <div class="background-image"></div>
 
      <ul id="context-menu" class="context-menu">
     <li onclick="location.href='index.html'">🏠 Ritorna alla home</li>
@@ -33,10 +33,11 @@
             ☰
         </button>
         <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
             <li><a href="fillYourHand.html">Gioca</a></li>
             <li><a href="gameBoard.html">Plancia</a></li>
-            <li><a href="coinDiceSimulator.html">Moneta e dadi</a></li>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="coinDiceSimulator.html">Simulatore</a></li>
+            
         </ul>
         </div>
     </nav>
@@ -44,12 +45,16 @@
     <div class="container">
         <h1 class="title" id="videoTitle">Video 1</h1>
 
-        <div class="video-container">
-            <video id="videoPlayer" controls>
-                <source src="" type="video/mp4">
-                Il tuo browser non supporta i video HTML5.
-            </video>
-        </div>
+                    <div class="video-container">
+                    <!-- Video player originale -->
+                    <video id="videoPlayer" controls>
+                        <source src="" type="video/mp4">
+                        Il tuo browser non supporta i video HTML5.
+                    </video>
+
+                    <!-- Nuovo placeholder per le slide senza video -->
+                    <img id="videoPlaceholder" src="" alt="Coming Soon" style="display: none;">
+                </div>
 
         <div class="controls">
             <button class="btn" id="prevBtn">◀</button>
@@ -85,11 +90,6 @@
     </div>
 
 
-    
-
-    <footer>
-        God Lucky © 2025 - Tutti i diritti riservati
-    </footer>
 
     <script src="js/howToPlay.js"></script>
 </body>
