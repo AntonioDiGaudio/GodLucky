@@ -273,6 +273,11 @@ button {
 
 /* Mobile */
 @media (max-width: 767px) {
+  html, body {
+  overflow-x: hidden;
+}
+
+
   .burger {
     display: block;
     width: 36%;
@@ -352,6 +357,7 @@ button {
   backface-visibility: hidden;
   background-size: cover;
   background-position: center;
+  border-radius: 5%;
 }
 
 .card-back {
