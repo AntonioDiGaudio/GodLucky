@@ -405,3 +405,100 @@ border-bottom: 3px solid #000;
   padding: 8px 0;
   border-bottom: 1px solid #ccc; /* linea sottile grigia */
 }
+
+
+
+.mobile-warning {
+  display: none !important;
+  text-align: center;
+  font-size: 16px;
+  background-color: #ff4d4d;
+  color: #000;
+  padding: 12px 10px;
+  border-radius: 6px;
+  margin: 10px auto;
+  max-width: 90%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+@media only screen and (max-width: 768px) {
+  .mobile-warning {
+    display: block !important;
+  }
+}
+
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;              /* nascosto finché non serve */
+  align-items: center;        /* per centrare verticalmente */
+  justify-content: center;    /* per centrare orizzontalmente */
+  z-index: 9999;              /* sopra ogni altro elemento */
+}
+
+/* 2) Finestra interna con sfondo bianco */
+.modal-window {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  max-width: 90%;
+  width: 320px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+/* 3) Titolo e testo di avviso */
+.modal-window h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #333;
+}
+.modal-window p {
+  margin: 16px 0 24px;
+  font-size: 16px;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* 4) Contenitore pulsanti, affianca i due bottoni */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* 5) Stile di base per i pulsanti della modale */
+.modal-btn {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 5.1) Pulsante “Conferma” (colore primario) */
+.modal-btn.confirm {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+/* 5.2) Pulsante “Annulla” (colore secondario) */
+.modal-btn.cancel {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* 6) Effetto hover (opzionale) */
+.modal-btn.confirm:hover {
+  background-color: #b71c1c;
+}
+.modal-btn.cancel:hover {
+  background-color: #b3b3b3;
+}
