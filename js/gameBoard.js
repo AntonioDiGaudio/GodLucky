@@ -83,24 +83,27 @@ function handleClick(e) {
   const btnIndex = parseInt(btn.dataset.index);
   const [macroIndex, subIndex] = colId.split('-').map(Number);
 
+  // 1) Leggo lo stato salvato (o creo un oggetto vuoto se non esiste)
+  let state = JSON.parse(localStorage.getItem('buttonState')) || {};
+  // 2) Controllo se il bottone cliccato è già quello attivo
+  const alreadyActive = state[colId] === btnIndex;
+  if (alreadyActive) {
+    // Se è già attivo, non faccio nulla (rimane selezionato)
+    return;
+  }
+
+  // 3) Altrimenti, rimuovo 'active' da tutti i bottoni di quella colonna
   const buttons = document.querySelectorAll(
     `.button-group[data-col-id="${colId}"] button`
   );
   buttons.forEach(b => b.classList.remove('active'));
 
-  let state = JSON.parse(localStorage.getItem('buttonState')) || {};
-  const alreadyActive = state[colId] === btnIndex;
-
-  if (alreadyActive) {
-    delete state[colId];
-    localStorage.setItem('buttonState', JSON.stringify(state));
-    return;
-  }
-
+  // 4) Aggiungo 'active' al bottone cliccato e aggiorno lo stato
   btn.classList.add('active');
   state[colId] = btnIndex;
   localStorage.setItem('buttonState', JSON.stringify(state));
 
+  // 5) Aggiorno characterStates e stampo il log solo se c’è un cambiamento
   const isFede = subIndex === 0;
   const statType = isFede ? 'fede' : 'corruzione';
   const prevValue = characterStates[macroIndex][statType];
@@ -112,6 +115,7 @@ function handleClick(e) {
     logChange(macroIndex, statType, prevValue, newValue);
   }
 }
+
 
 // Logging cambiamenti
 function logChange(index, statType, from, to) {
@@ -266,4 +270,35 @@ document.addEventListener('click', function () {
 
 document.getElementById('burger-navbar').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('active');
+});
+
+
+
+const clearBtn = document.getElementById('clearGameBtn');
+const modalOverlay = document.getElementById('confirmModal');
+const confirmBtn = document.getElementById('confirmClear');
+const cancelBtn = document.getElementById('cancelClear');
+
+
+
+
+
+clearBtn.addEventListener('click', function(event) {
+  event.preventDefault();
+  modalOverlay.style.display = 'flex';
+});
+
+modalOverlay.addEventListener('click', function(e) {
+  if (e.target === modalOverlay) {
+    modalOverlay.style.display = 'none';
+  }
+});
+
+cancelBtn.addEventListener('click', function() {
+  modalOverlay.style.display = 'none';
+});
+
+confirmBtn.addEventListener('click', function() {
+  modalOverlay.style.display = 'none';
+  resetAll();
 });
