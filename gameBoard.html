@@ -15,6 +15,16 @@
     <div class="background-image"></div>
 
 
+      <div id="confirmModal" class="modal-overlay">
+        <div class="modal-window">
+          <h3>Conferma Pulizia</h3>
+          <p>Sei sicuro di voler pulire la partita? Tutti i dati verranno azzerati.</p>
+          <div class="modal-buttons">
+            <button id="confirmClear" class="modal-btn confirm">Conferma</button>
+            <button id="cancelClear" class="modal-btn cancel">Annulla</button>
+          </div>
+        </div>
+      </div>
 
    <ul id="context-menu" class="context-menu">
     <li onclick="location.href='index.html'">🏠 Ritorna alla home</li>
@@ -40,7 +50,7 @@
         </ul>
         </div>
     </nav>
-
+<div class="mobile-warning">⚠️ Per un’esperienza migliorata, si consiglia di usare un PC o un desktop ⚠️</div>
 <div class="columns-container" id="columnsContainer"></div>
 <div id="logContainer">
   <h2>Storico delle azioni</h2>
@@ -51,8 +61,8 @@
 </div>
 <h2 style="text-align: center;
     font-size: 15px !important;
-    color: white;">Attenzione! Dopo aver premuto il tasto in basso, tutti i valori ritorneranno agli stati iniziali</h2>
-<button class="reset-btn" onclick="resetAll()">Pulisci partita</button>
+    color: white;">Attenzione! Dopo aver premuto il tasto in basso, i punti fede e corruzione di ogni personaggio ritorneranno ai rispettivi valori iniziali iniziali</h2>
+<button  id="clearGameBtn" class="reset-btn" >Pulisci partita</button>
 
 
 
